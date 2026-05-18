@@ -1,0 +1,54 @@
+<!-- Configurações dos perfis financeiros. -->
+<section class="page-shell configuracoes-page">
+  <div class="configuracoes-page__hero">
+    <div>
+      <h1 class="page-title">Configurações</h1>
+      <p class="page-subtitle">Ajuste os percentuais de entrada usados nas metas.</p>
+    </div>
+    <button type="button" class="btn btn-outline-danger" (click)="resetDemoData()">
+      <i class="bi bi-arrow-repeat"></i>
+      Restaurar demo
+    </button>
+  </div>
+
+  <p *ngIf="message" class="alert alert-success mb-0">{{ message }}</p>
+
+  <div class="configuracoes-page__grid">
+    <article *ngFor="let profile of profiles" class="finance-card configuracoes-page__card">
+      <div class="configuracoes-page__card-head">
+        <div>
+          <h2>{{ profile.label }}</h2>
+          <p>{{ profile.description }}</p>
+        </div>
+        <span *ngIf="profile.id === selectedProfileId" class="badge text-bg-dark">Ativo</span>
+      </div>
+
+      <label class="configuracoes-page__field">
+        <span>Percentual máximo de gastos</span>
+        <div class="input-group">
+          <input
+            class="form-control"
+            type="number"
+            min="1"
+            max="100"
+            step="1"
+            name="percentage-{{ profile.id }}"
+            [(ngModel)]="draftPercentages[profile.id]"
+          />
+          <span class="input-group-text">%</span>
+        </div>
+      </label>
+
+      <div class="configuracoes-page__actions">
+        <button type="button" class="btn btn-outline-dark" (click)="selectProfile(profile.id)">
+          <i class="bi bi-bullseye"></i>
+          Usar perfil
+        </button>
+        <button type="button" class="btn btn-dark" (click)="saveProfile(profile)">
+          <i class="bi bi-save"></i>
+          Salvar
+        </button>
+      </div>
+    </article>
+  </div>
+</section>

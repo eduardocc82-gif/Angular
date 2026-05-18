@@ -1,0 +1,53 @@
+<!-- Página dedicada a metas e perfis financeiros. -->
+<section class="page-shell metas-page">
+  <div>
+    <h1 class="page-title">Metas de gastos</h1>
+    <p class="page-subtitle">Compare seu consumo mensal com o perfil financeiro selecionado.</p>
+  </div>
+
+  <div class="metas-page__profiles">
+    <button
+      *ngFor="let profile of profiles"
+      type="button"
+      class="finance-card metas-page__profile"
+      [class.metas-page__profile--active]="profile.id === selectedProfileId"
+      (click)="selectProfile(profile.id)"
+    >
+      <strong>{{ profile.label }}</strong>
+      <span>{{ profile.percentage }}% das entradas</span>
+      <small>{{ profile.description }}</small>
+    </button>
+  </div>
+
+  <div class="metas-page__cards">
+    <app-summary-card
+      title="Entradas do mês"
+      [value]="summary.entradas"
+      helper="Base da meta"
+      icon="bi-graph-up-arrow"
+      tone="green"
+    ></app-summary-card>
+    <app-summary-card
+      title="Saídas do mês"
+      [value]="summary.saidas"
+      helper="Consumo atual"
+      icon="bi-graph-down-arrow"
+      tone="red"
+    ></app-summary-card>
+    <app-summary-card
+      title="Saldo"
+      [value]="summary.saldo"
+      helper="Depois das saídas"
+      icon="bi-wallet2"
+      tone="blue"
+    ></app-summary-card>
+  </div>
+
+  <app-goal-projection [profile]="selectedProfile" [projection]="projection"></app-goal-projection>
+
+  <app-chart-panel
+    title="Despesas do mês por categoria"
+    mode="category"
+    [records]="currentMonthRecords"
+  ></app-chart-panel>
+</section>

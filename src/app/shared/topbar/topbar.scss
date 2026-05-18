@@ -1,0 +1,85 @@
+/* Barra superior com comportamento responsivo e visual de produto financeiro. */
+.topbar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--app-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar__inner {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 1rem;
+}
+
+.topbar__brand {
+  align-items: center;
+  color: var(--app-text);
+  display: inline-flex;
+  gap: 0.75rem;
+  min-width: 250px;
+  text-decoration: none;
+}
+
+.topbar__brand strong,
+.topbar__brand small {
+  display: block;
+}
+
+.topbar__brand small {
+  color: var(--app-muted);
+  font-size: 0.78rem;
+}
+
+.topbar__logo {
+  align-items: center;
+  background: #111827;
+  border-radius: 8px;
+  color: #ffffff;
+  display: inline-flex;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.topbar__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: flex-end;
+}
+
+.topbar__link {
+  align-items: center;
+  border-radius: 8px;
+  color: var(--app-muted);
+  display: inline-flex;
+  font-size: 0.9rem;
+  font-weight: 650;
+  gap: 0.45rem;
+  padding: 0.6rem 0.8rem;
+  text-decoration: none;
+}
+
+.topbar__link--active,
+.topbar__link:hover {
+  background: #111827;
+  color: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .topbar__inner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .topbar__nav {
+    justify-content: flex-start;
+    width: 100%;
+  }
+}

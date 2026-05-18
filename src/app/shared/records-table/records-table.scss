@@ -1,0 +1,51 @@
+/* Estrutura visual da tabela abaixo dos filtros/cards. */
+.records-table {
+  overflow: hidden;
+}
+
+.records-table__heading {
+  margin: 0;
+  padding: 1.2rem 1.2rem 0;
+}
+
+.records-table__heading h2 {
+  font-size: 1.15rem;
+  font-weight: 750;
+  margin: 0;
+}
+
+.records-table__heading p {
+  color: var(--app-muted);
+  margin: 0.2rem 0 0;
+}
+
+.records-table table {
+  min-width: 760px;
+}
+
+.records-table th {
+  color: var(--app-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.records-table td {
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+.records-table td small {
+  color: var(--app-muted);
+  display: block;
+  font-size: 0.75rem;
+}
+
+.records-table__empty {
+  color: var(--app-muted);
+  padding: 2rem !important;
+  text-align: center;
+}
+
+.records-table--compact .records-table__heading {
+  padding-top: 1rem;
+}

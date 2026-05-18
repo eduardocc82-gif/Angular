@@ -1,0 +1,58 @@
+/* Layout do dashboard seguindo cards em linha no desktop e coluna no celular. */
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.dashboard-page__hero {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dashboard-page__hero .btn {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.dashboard-page__cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dashboard-page__cards app-summary-card {
+  flex: 1 1 230px;
+}
+
+.dashboard-page__charts {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+@media (max-width: 920px) {
+  .dashboard-page__charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard-page__hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard-page__hero .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dashboard-page__cards {
+    flex-direction: column;
+  }
+}

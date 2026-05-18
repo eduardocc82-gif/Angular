@@ -1,0 +1,54 @@
+/* Card responsivo usado em grid/flex sem mudar dimensões no hover. */
+.summary-card {
+  background: #ffffff;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  box-shadow: var(--app-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-height: 150px;
+  padding: 1.3rem;
+}
+
+.summary-card__header {
+  align-items: center;
+  color: var(--app-muted);
+  display: flex;
+  font-size: 0.9rem;
+  font-weight: 700;
+  justify-content: space-between;
+}
+
+.summary-card__header i {
+  font-size: 1.15rem;
+}
+
+.summary-card__value {
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  line-height: 1.15;
+}
+
+.summary-card small {
+  color: var(--app-muted);
+}
+
+.summary-card--green .summary-card__value,
+.summary-card--green i {
+  color: var(--app-green);
+}
+
+.summary-card--red .summary-card__value,
+.summary-card--red i {
+  color: var(--app-red);
+}
+
+.summary-card--blue .summary-card__value,
+.summary-card--blue i {
+  color: var(--app-blue);
+}
+
+.summary-card--yellow .summary-card__value,
+.summary-card--yellow i {
+  color: var(--app-yellow);
+}

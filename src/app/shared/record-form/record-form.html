@@ -1,0 +1,86 @@
+<!-- Formulário de cadastro para receitas, despesas e investimentos. -->
+<section class="finance-card record-form">
+  <div class="section-heading">
+    <div>
+      <h2>{{ title }}</h2>
+      <p>Campos obrigatórios: descrição, tipo, categoria, data e valor.</p>
+    </div>
+  </div>
+
+  <form #financeForm="ngForm" (ngSubmit)="submit()" novalidate>
+    <div class="record-form__grid">
+      <label class="record-form__field record-form__field--wide">
+        <span>Descrição</span>
+        <input
+          class="form-control"
+          name="description"
+          type="text"
+          required
+          maxlength="80"
+          [(ngModel)]="form.description"
+          placeholder="Ex: Conta de luz"
+        />
+      </label>
+
+      <label class="record-form__field" *ngIf="!lockedType">
+        <span>Tipo</span>
+        <select
+          class="form-select"
+          name="type"
+          required
+          [(ngModel)]="form.type"
+          (ngModelChange)="onTypeChange($event)"
+        >
+          <option *ngFor="let type of typeOptions" [ngValue]="type.value">{{ type.label }}</option>
+        </select>
+      </label>
+
+      <div class="record-form__field" *ngIf="lockedType">
+        <span>Tipo</span>
+        <div class="record-form__locked">
+          <i class="bi bi-lock"></i>
+          {{ lockedType === 'investimento' ? 'Investimento' : lockedType }}
+        </div>
+      </div>
+
+      <label class="record-form__field">
+        <span>Categoria</span>
+        <select class="form-select" name="category" required [(ngModel)]="form.category">
+          <option *ngFor="let category of categories" [ngValue]="category">{{ category }}</option>
+        </select>
+      </label>
+
+      <label class="record-form__field">
+        <span>Data</span>
+        <input class="form-control" name="date" type="date" required [(ngModel)]="form.date" />
+      </label>
+
+      <label class="record-form__field">
+        <span>Valor</span>
+        <input
+          class="form-control"
+          name="value"
+          type="number"
+          min="0.01"
+          step="0.01"
+          required
+          [(ngModel)]="form.value"
+          placeholder="0,00"
+        />
+      </label>
+    </div>
+
+    <p *ngIf="errorMessage" class="alert alert-danger mt-3 mb-0">{{ errorMessage }}</p>
+
+    <div class="record-form__actions">
+      <button type="button" class="btn btn-outline-secondary" (click)="reset()">
+        <i class="bi bi-arrow-counterclockwise"></i>
+        Limpar
+      </button>
+      <button type="submit" class="btn btn-dark" [disabled]="financeForm.invalid">
+        <i class="bi bi-check2-circle"></i>
+        {{ submitLabel }}
+      </button>
+    </div>
+  </form>
+</section>

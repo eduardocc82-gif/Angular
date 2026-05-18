@@ -1,0 +1,39 @@
+<!-- Módulo dedicado a aportes, separado das despesas comuns. -->
+<section class="page-shell investimentos-page">
+  <div class="investimentos-page__hero">
+    <div>
+      <h1 class="page-title">Investimentos</h1>
+      <p class="page-subtitle">Cadastre e acompanhe aportes sem misturar com despesas.</p>
+    </div>
+    <app-summary-card
+      title="Total investido"
+      [value]="totalInvested"
+      helper="Conforme filtros atuais"
+      icon="bi-graph-up-arrow"
+      tone="yellow"
+    ></app-summary-card>
+  </div>
+
+  <app-record-form
+    lockedType="investimento"
+    title="Novo aporte"
+    submitLabel="Salvar investimento"
+    (saveRecord)="saveInvestment($event)"
+  ></app-record-form>
+
+  <p *ngIf="message" class="alert alert-success mb-0">{{ message }}</p>
+
+  <app-filter-bar
+    [months]="months"
+    [categories]="categories"
+    [filters]="filters"
+    [showTypeFilter]="false"
+    (filtersChange)="updateFilters($event)"
+  ></app-filter-bar>
+
+  <app-records-table
+    title="Aportes de investimentos"
+    [records]="filteredRecords"
+    (deleteRecord)="deleteRecord($event)"
+  ></app-records-table>
+</section>

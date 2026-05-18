@@ -1,0 +1,98 @@
+/* Painel de meta com barra de progresso parecida com o modelo. */
+.goal-projection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.2rem;
+}
+
+.goal-projection h2 {
+  font-size: 1.15rem;
+  font-weight: 750;
+  margin: 0;
+}
+
+.goal-projection p,
+.goal-projection__row span,
+.goal-projection__status span {
+  color: var(--app-muted);
+}
+
+.goal-projection__badge {
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  min-width: 74px;
+  padding: 0.45rem 0.75rem;
+  text-align: center;
+}
+
+.goal-projection__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.goal-projection__bar {
+  background: #e5e7eb;
+  border-radius: 999px;
+  height: 12px;
+  overflow: hidden;
+}
+
+.goal-projection__bar div {
+  border-radius: inherit;
+  height: 100%;
+  transition: width 0.2s ease-in-out;
+}
+
+.goal-projection__status {
+  align-items: flex-start;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.goal-projection__status i {
+  font-size: 1.2rem;
+  line-height: 1.3;
+}
+
+.goal-projection__status strong,
+.goal-projection__status span {
+  display: block;
+}
+
+.goal-projection--positiva .goal-projection__badge,
+.goal-projection--positiva .goal-projection__bar div {
+  background: var(--app-green);
+}
+
+.goal-projection--positiva .goal-projection__status i {
+  color: var(--app-green);
+}
+
+.goal-projection--alerta .goal-projection__badge,
+.goal-projection--alerta .goal-projection__bar div {
+  background: var(--app-yellow);
+}
+
+.goal-projection--alerta .goal-projection__status i {
+  color: var(--app-yellow);
+}
+
+.goal-projection--negativa .goal-projection__badge,
+.goal-projection--negativa .goal-projection__bar div {
+  background: var(--app-red);
+}
+
+.goal-projection--negativa .goal-projection__status i {
+  color: var(--app-red);
+}
+
+@media (max-width: 640px) {
+  .goal-projection__row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

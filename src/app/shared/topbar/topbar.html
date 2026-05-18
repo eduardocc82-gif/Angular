@@ -1,0 +1,25 @@
+<!-- Cabeçalho principal inspirado no layout claro do modelo. -->
+<header class="topbar">
+  <div class="topbar__inner">
+    <a class="topbar__brand" routerLink="/dashboard" aria-label="Ir para o dashboard">
+      <span class="topbar__logo"><i class="bi bi-wallet2"></i></span>
+      <span>
+        <strong>Dashboard Financeiro</strong>
+        <small>Controle suas finanças pessoais</small>
+      </span>
+    </a>
+
+    <!-- Navegação responsiva entre as rotas exigidas. -->
+    <nav class="topbar__nav" aria-label="Navegação principal">
+      <a
+        *ngFor="let item of navItems"
+        class="topbar__link"
+        [routerLink]="item.route"
+        routerLinkActive="topbar__link--active"
+      >
+        <i class="bi" [ngClass]="item.icon"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    </nav>
+  </div>
+</header>

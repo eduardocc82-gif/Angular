@@ -1,0 +1,6 @@
+/* Página de lançamentos com respiro entre formulário, filtros e tabela. */
+.lancamentos-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}

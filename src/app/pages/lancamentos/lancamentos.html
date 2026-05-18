@@ -1,0 +1,28 @@
+<!-- Página de gestão completa de lançamentos. -->
+<section class="page-shell lancamentos-page">
+  <div>
+    <h1 class="page-title">Lançamentos</h1>
+    <p class="page-subtitle">Adicione receitas, despesas e investimentos com persistência em localStorage.</p>
+  </div>
+
+  <app-record-form
+    title="Cadastrar lançamento"
+    submitLabel="Salvar lançamento"
+    (saveRecord)="saveRecord($event)"
+  ></app-record-form>
+
+  <p *ngIf="successMessage" class="alert alert-success mb-0">{{ successMessage }}</p>
+
+  <app-filter-bar
+    [months]="months"
+    [categories]="categories"
+    [filters]="filters"
+    (filtersChange)="updateFilters($event)"
+  ></app-filter-bar>
+
+  <app-records-table
+    title="Todos os lançamentos"
+    [records]="filteredRecords"
+    (deleteRecord)="deleteRecord($event)"
+  ></app-records-table>
+</section>

@@ -1,0 +1,21 @@
+/* Barra de filtros flexível: linhas no desktop, colunas no celular. */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  padding: 1rem;
+}
+
+.filter-bar__field {
+  display: flex;
+  flex: 1 1 220px;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.filter-bar__field span {
+  color: var(--app-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}

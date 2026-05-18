@@ -1,0 +1,78 @@
+/* Formulário em grade para acelerar o cadastro de lançamentos. */
+.record-form {
+  padding: 1.2rem;
+}
+
+.record-form h2 {
+  font-size: 1.15rem;
+  font-weight: 750;
+  margin: 0;
+}
+
+.record-form p {
+  color: var(--app-muted);
+  margin: 0.2rem 0 0;
+}
+
+.record-form__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1.4fr 0.8fr 1fr 0.8fr 0.8fr;
+}
+
+.record-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.record-form__field span {
+  color: var(--app-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.record-form__locked {
+  align-items: center;
+  background: #f3f4f6;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  display: flex;
+  gap: 0.5rem;
+  min-height: 42px;
+  padding: 0.55rem 0.75rem;
+  text-transform: capitalize;
+}
+
+.record-form__actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.record-form__actions .btn {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.45rem;
+}
+
+@media (max-width: 1050px) {
+  .record-form__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .record-form__field--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .record-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .record-form__actions {
+    flex-direction: column-reverse;
+  }
+}

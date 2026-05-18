@@ -1,0 +1,50 @@
+<!-- Tabela de registros financeiros com exclusão via @Output. -->
+<section class="finance-card records-table" [class.records-table--compact]="compact">
+  <div class="section-heading records-table__heading">
+    <div>
+      <h2>{{ title }}</h2>
+      <p>{{ records.length }} registro(s) encontrado(s)</p>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Descrição</th>
+          <th>Tipo</th>
+          <th>Categoria</th>
+          <th>Data</th>
+          <th class="text-end">Valor</th>
+          <th class="text-end">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of records; trackBy: trackById">
+          <td>
+            <strong>{{ record.description }}</strong>
+            <small>ID oculto: {{ record.id.slice(0, 8) }}</small>
+          </td>
+          <td><span [class]="typeClass(record.type)">{{ typeLabel(record.type) }}</span></td>
+          <td>{{ record.category }}</td>
+          <td>{{ record.date | date: 'dd/MM/yyyy' }}</td>
+          <td class="text-end fw-bold">{{ record.value | currency: 'BRL' : 'symbol' : '1.2-2' }}</td>
+          <td class="text-end">
+            <button
+              type="button"
+              class="btn btn-outline-danger icon-button"
+              title="Excluir lançamento"
+              [attr.aria-label]="'Excluir ' + record.description"
+              (click)="deleteRecord.emit(record.id)"
+            >
+              <i class="bi bi-trash3"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="records.length === 0">
+          <td colspan="6" class="records-table__empty">Nenhum lançamento encontrado para os filtros atuais.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,0 +1,40 @@
+<!-- Filtros exigidos por mês e categoria usando select-option. -->
+<div class="filter-bar finance-card">
+  <label class="filter-bar__field">
+    <span>Mês</span>
+    <select
+      class="form-select"
+      [ngModel]="filters.month"
+      (ngModelChange)="updateFilter('month', $event)"
+    >
+      <option value="todos">Todos os meses</option>
+      <option *ngFor="let month of months" [value]="month">{{ monthLabel(month) }}</option>
+    </select>
+  </label>
+
+  <label class="filter-bar__field">
+    <span>Categoria</span>
+    <select
+      class="form-select"
+      [ngModel]="filters.category"
+      (ngModelChange)="updateFilter('category', $event)"
+    >
+      <option value="todas">Todas as categorias</option>
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+  </label>
+
+  <label *ngIf="showTypeFilter" class="filter-bar__field">
+    <span>Tipo</span>
+    <select
+      class="form-select"
+      [ngModel]="filters.type"
+      (ngModelChange)="updateFilter('type', $event)"
+    >
+      <option value="todos">Todos os tipos</option>
+      <option value="entrada">Entradas</option>
+      <option value="saida">Saídas</option>
+      <option value="investimento">Investimentos</option>
+    </select>
+  </label>
+</div>

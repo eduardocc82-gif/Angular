@@ -1,0 +1,30 @@
+/* Card de gráfico com altura fixa e canvas responsivo. */
+.chart-panel {
+  padding: 1.2rem;
+}
+
+.chart-panel__heading {
+  margin-bottom: 0.75rem;
+}
+
+.chart-panel__heading h2 {
+  font-size: 1.15rem;
+  font-weight: 750;
+  margin: 0;
+}
+
+.chart-panel__canvas {
+  height: 300px;
+  position: relative;
+}
+
+.chart-panel__empty {
+  align-items: center;
+  color: var(--app-muted);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  margin: 0;
+  position: absolute;
+  text-align: center;
+}

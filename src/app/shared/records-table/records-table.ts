@@ -1,0 +1,40 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+import { FinancialRecord } from '../../models/finance.models';
+
+@Component({
+  selector: 'app-records-table',
+  standalone: false,
+  templateUrl: './records-table.html',
+  styleUrl: './records-table.scss',
+})
+export class RecordsTable {
+  // Registros recebidos do componente pai por @Input.
+  @Input() records: FinancialRecord[] = [];
+  @Input() title = 'Lançamentos';
+  @Input() compact = false;
+
+  // Exclusão enviada ao pai por @Output, conforme requisito.
+  @Output() deleteRecord = new EventEmitter<string>();
+
+  // Identificador estável para renderização eficiente da tabela.
+  trackById(_index: number, record: FinancialRecord): string {
+    return record.id;
+  }
+
+  // Converte o tipo interno em texto amigável.
+  typeLabel(type: FinancialRecord['type']): string {
+    const labels = {
+      entrada: 'Entrada',
+      saida: 'Saída',
+      investimento: 'Investimento',
+    };
+
+    return labels[type];
+  }
+
+  // Classe visual do chip de tipo.
+  typeClass(type: FinancialRecord['type']): string {
+    return `type-pill type-pill--${type}`;
+  }
+}

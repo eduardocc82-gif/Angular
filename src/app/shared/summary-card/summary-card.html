@@ -1,0 +1,10 @@
+<!-- Card reutilizável para entradas, saídas, saldo e investimentos. -->
+<article class="summary-card" [ngClass]="'summary-card--' + tone">
+  <div class="summary-card__header">
+    <span>{{ title }}</span>
+    <i class="bi" [ngClass]="icon"></i>
+  </div>
+
+  <strong class="summary-card__value">{{ value | currency: 'BRL' : 'symbol' : '1.2-2' }}</strong>
+  <small>{{ helper }}</small>
+</article>

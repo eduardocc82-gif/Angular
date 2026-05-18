@@ -1,0 +1,19 @@
+/* Módulo de investimentos separado do fluxo de despesas. */
+.investimentos-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}
+
+.investimentos-page__hero {
+  align-items: stretch;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, 320px);
+}
+
+@media (max-width: 760px) {
+  .investimentos-page__hero {
+    grid-template-columns: 1fr;
+  }
+}

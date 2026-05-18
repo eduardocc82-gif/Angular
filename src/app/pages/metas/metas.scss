@@ -1,0 +1,60 @@
+/* Página de metas com cards de perfil clicáveis e densos. */
+.metas-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}
+
+.metas-page__profiles {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metas-page__profile {
+  background: #ffffff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem;
+  text-align: left;
+}
+
+.metas-page__profile strong {
+  font-size: 1.1rem;
+}
+
+.metas-page__profile span {
+  color: var(--app-blue);
+  font-weight: 800;
+}
+
+.metas-page__profile small {
+  color: var(--app-muted);
+}
+
+.metas-page__profile--active {
+  border-color: #111827;
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+
+.metas-page__cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.metas-page__cards app-summary-card {
+  flex: 1 1 230px;
+}
+
+@media (max-width: 820px) {
+  .metas-page__profiles {
+    grid-template-columns: 1fr;
+  }
+
+  .metas-page__cards {
+    flex-direction: column;
+  }
+}
