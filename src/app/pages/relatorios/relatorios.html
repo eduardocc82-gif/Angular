@@ -1,0 +1,103 @@
+<!-- Pagina dedicada a emissao de relatorios em PDF para impressao. -->
+<section class="page-shell relatorios-page">
+  <div class="relatorios-page__hero">
+    <div>
+      <h1 class="page-title">Relatórios</h1>
+      <p class="page-subtitle">
+        Gere relatórios dos lançamentos financeiros filtrando por mês ou tipo.
+      </p>
+    </div>
+  </div>
+
+  <section class="finance-card relatorios-page__filters">
+    <div class="section-heading">
+      <div>
+        <h2>Filtros do relatório</h2>
+        <p>Escolha o mês e o tipo antes de gerar o relatório.</p>
+      </div>
+    </div>
+
+    <div class="relatorios-page__filter-grid">
+      <label class="relatorios-page__field">
+        <span>Mês</span>
+        <select
+          class="form-select"
+          [ngModel]="filters.month"
+          (ngModelChange)="updateFilter('month', $event)"
+        >
+          <option value="todos">Todos os meses</option>
+          <option *ngFor="let month of months" [value]="month">{{ monthLabel(month) }}</option>
+        </select>
+      </label>
+
+      <label class="relatorios-page__field">
+        <span>Tipo</span>
+        <select
+          class="form-select"
+          [ngModel]="filters.type"
+          (ngModelChange)="updateFilter('type', $event)"
+        >
+          <option value="todos">Todos os tipos</option>
+          <option value="entrada">Entradas</option>
+          <option value="saida">Saídas</option>
+          <option value="investimento">Investimentos</option>
+        </select>
+      </label>
+
+      <button
+        type="button"
+        class="btn btn-outline-dark relatorios-page__filter-action"
+        (click)="generatePdf()"
+      >
+        <i class="bi bi-printer"></i>
+        Gerar para impressão
+      </button>
+    </div>
+  </section>
+
+  <p *ngIf="message" class="alert alert-info mb-0">{{ message }}</p>
+
+  <section class="finance-card relatorios-page__table">
+    <div class="section-heading relatorios-page__table-heading">
+      <div>
+        <h2>Prévia dos lançamentos</h2>
+        <p>{{ filteredRecords.length }} registro(s) no relatório atual</p>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Tipo</th>
+            <th>Categoria</th>
+            <th>Data</th>
+            <th class="text-end">Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of filteredRecords; trackBy: trackById">
+            <td>
+              <strong>{{ record.description }}</strong>
+              <small>{{ record.id.slice(0, 8) }}</small>
+            </td>
+            <td>
+              <span [class]="typeClass(record.type)">{{ typeLabel(record.type) }}</span>
+            </td>
+            <td>{{ record.category }}</td>
+            <td>{{ formatDate(record.date) }}</td>
+            <td class="text-end fw-bold" [class]="valueClass(record.type)">
+              {{ record.value | currency: 'BRL' : 'symbol' : '1.2-2' }}
+            </td>
+          </tr>
+          <tr *ngIf="filteredRecords.length === 0">
+            <td colspan="5" class="relatorios-page__empty">
+              Nenhum lançamento encontrado para os filtros atuais.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>

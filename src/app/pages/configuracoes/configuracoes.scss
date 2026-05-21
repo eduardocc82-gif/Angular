@@ -32,6 +32,10 @@
   padding: 1.2rem;
 }
 
+.configuracoes-page__settings-card {
+  max-width: 620px;
+}
+
 .configuracoes-page__card-head {
   align-items: flex-start;
   display: flex;
@@ -61,6 +65,12 @@
   display: flex;
   gap: 0.75rem;
   justify-content: flex-end;
+}
+
+.configuracoes-page__range-labels {
+  display: flex;
+  font-size: 0.82rem;
+  justify-content: space-between;
 }
 
 @media (max-width: 920px) {

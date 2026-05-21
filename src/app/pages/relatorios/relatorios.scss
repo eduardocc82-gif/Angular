@@ -1,0 +1,136 @@
+/* Tela de relatorios com filtros objetivos e previa imprimivel. */
+.relatorios-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}
+
+.relatorios-page__hero {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.relatorios-page__hero .btn,
+.relatorios-page__filter-action {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.45rem;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.relatorios-page__filters {
+  padding: 1rem;
+}
+
+.relatorios-page__filters .section-heading {
+  margin-bottom: 1rem;
+}
+
+.relatorios-page__filters h2,
+.relatorios-page__table-heading h2 {
+  font-size: 1.15rem;
+  font-weight: 750;
+  margin: 0;
+}
+
+.relatorios-page__filters p,
+.relatorios-page__table-heading p {
+  color: var(--app-muted);
+  margin: 0.2rem 0 0;
+}
+
+.relatorios-page__filter-grid {
+  align-items: end;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) auto;
+}
+
+.relatorios-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.relatorios-page__field span {
+  color: var(--app-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.relatorios-page__table {
+  overflow: hidden;
+}
+
+.relatorios-page__table-heading {
+  margin: 0;
+  padding: 1.2rem 1.2rem 0;
+}
+
+.relatorios-page__table table {
+  min-width: 720px;
+}
+
+.relatorios-page__table th {
+  color: var(--app-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.relatorios-page__table td {
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+.relatorios-page__table td small {
+  color: var(--app-muted);
+  display: block;
+  font-size: 0.75rem;
+}
+
+.relatorios-page__value {
+  border-radius: 8px;
+}
+
+.relatorios-page__value--entrada {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #047857 !important;
+}
+
+.relatorios-page__value--saida {
+  background: rgba(239, 68, 68, 0.12) !important;
+  color: #b91c1c !important;
+}
+
+.relatorios-page__value--investimento {
+  background: rgba(245, 158, 11, 0.16) !important;
+  color: #92400e !important;
+}
+
+.relatorios-page__empty {
+  color: var(--app-muted);
+  padding: 2rem !important;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .relatorios-page__hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .relatorios-page__hero .btn {
+    width: 100%;
+  }
+
+  .relatorios-page__filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .relatorios-page__filter-action {
+    width: 100%;
+  }
+}

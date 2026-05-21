@@ -11,8 +11,8 @@ export class Topbar {
   readonly navItems = [
     { label: 'Dashboard', route: '/dashboard', icon: 'bi-speedometer2' },
     { label: 'Lançamentos', route: '/lancamentos', icon: 'bi-plus-circle' },
-    { label: 'Metas', route: '/metas', icon: 'bi-bullseye' },
     { label: 'Investimentos', route: '/investimentos', icon: 'bi-graph-up-arrow' },
+    { label: 'Relatórios', route: '/relatorios', icon: 'bi-file-earmark-pdf' },
     { label: 'Configurações', route: '/configuracoes', icon: 'bi-sliders' },
   ];
 }

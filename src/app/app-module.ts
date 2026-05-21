@@ -12,12 +12,14 @@ import { FilterBar } from './shared/filter-bar/filter-bar';
 import { RecordsTable } from './shared/records-table/records-table';
 import { RecordForm } from './shared/record-form/record-form';
 import { ChartPanel } from './shared/chart-panel/chart-panel';
+import { ExpenseBalance } from './shared/expense-balance/expense-balance';
 import { GoalProjection } from './shared/goal-projection/goal-projection';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Lancamentos } from './pages/lancamentos/lancamentos';
 import { Metas } from './pages/metas/metas';
 import { Configuracoes } from './pages/configuracoes/configuracoes';
 import { Investimentos } from './pages/investimentos/investimentos';
+import { Relatorios } from './pages/relatorios/relatorios';
 
 // Registro do locale pt-BR para moeda, datas e números no padrão brasileiro.
 registerLocaleData(localePt);
@@ -31,10 +33,12 @@ registerLocaleData(localePt);
     RecordsTable,
     RecordForm,
     ChartPanel,
+    ExpenseBalance,
     GoalProjection,
     Dashboard,
     Lancamentos,
     Metas,
+    Relatorios,
     Configuracoes,
     Investimentos,
   ],

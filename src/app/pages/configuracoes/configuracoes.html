@@ -13,18 +13,62 @@
 
   <p *ngIf="message" class="alert alert-success mb-0">{{ message }}</p>
 
+  <article class="finance-card configuracoes-page__card configuracoes-page__settings-card">
+    <div class="configuracoes-page__card-head">
+      <div>
+        <h2>Balanceamento das Despesas</h2>
+      </div>
+    </div>
+
+    <label class="configuracoes-page__field">
+      <span>Percentual mínimo da despesa no total da receita para que seja considerada desbalanceada </span>
+      <div class="input-group">
+        <input
+          class="form-control"
+          type="number"
+          min="30"
+          max="100"
+          step="1"
+          name="expense-balance-threshold"
+          [(ngModel)]="draftExpenseBalanceThresholdPercentage"
+        />
+        <span class="input-group-text">%</span>
+      </div>
+      <input
+        class="form-range"
+        type="range"
+        min="30"
+        max="100"
+        step="1"
+        name="expense-balance-threshold-range"
+        [(ngModel)]="draftExpenseBalanceThresholdPercentage"
+      />
+      <div class="configuracoes-page__range-labels">
+        <span>30%</span>
+        <span>100%</span>
+      </div>
+    </label>
+
+    <div class="configuracoes-page__actions">
+      <button type="button" class="btn btn-dark" (click)="saveExpenseBalanceThreshold()">
+        <i class="bi bi-save"></i>
+        Salvar
+      </button>
+    </div>
+  </article>
+
   <div class="configuracoes-page__grid">
     <article *ngFor="let profile of profiles" class="finance-card configuracoes-page__card">
       <div class="configuracoes-page__card-head">
         <div>
           <h2>{{ profile.label }}</h2>
-          <p>{{ profile.description }}</p>
+          <!-- <p>{{ profile.description }}</p> -->
         </div>
         <span *ngIf="profile.id === selectedProfileId" class="badge text-bg-dark">Ativo</span>
       </div>
 
       <label class="configuracoes-page__field">
-        <span>Percentual máximo de gastos</span>
+        <span>Percentual máximo de gastos atual</span>
         <div class="input-group">
           <input
             class="form-control"
@@ -40,10 +84,10 @@
       </label>
 
       <div class="configuracoes-page__actions">
-        <button type="button" class="btn btn-outline-dark" (click)="selectProfile(profile.id)">
+       <!-- <button type="button" class="btn btn-outline-dark" (click)="selectProfile(profile.id)">
           <i class="bi bi-bullseye"></i>
           Usar perfil
-        </button>
+        </button> -->
         <button type="button" class="btn btn-dark" (click)="saveProfile(profile)">
           <i class="bi bi-save"></i>
           Salvar

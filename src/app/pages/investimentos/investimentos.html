@@ -19,6 +19,7 @@
     title="Novo aporte"
     submitLabel="Salvar investimento"
     (saveRecord)="saveInvestment($event)"
+    descricaoPlaceholder="Ex: Capital Aportado"
   ></app-record-form>
 
   <p *ngIf="message" class="alert alert-success mb-0">{{ message }}</p>

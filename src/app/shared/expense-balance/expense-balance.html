@@ -1,0 +1,20 @@
+<!-- Regra de negocio para identificar concentracao excessiva de despesas. -->
+<section class="finance-card expense-balance" [ngClass]="statusClass()" *ngIf="balance">
+  <div class="section-heading expense-balance__heading">
+    <h2>Balanceamento das Despesas </h2>
+  </div>
+
+  <div class="expense-balance__status">
+    <i class="bi" [ngClass]="statusIcon()"></i>
+    <div>
+      <strong *ngIf="balance.status === 'positiva'">{{ balance.message }}</strong>
+      <strong *ngIf="balance.status === 'negativa'">
+        <span>Suas despesas mensais est&atilde;o desbalanceadas. Verifique o item </span>
+        <span class="expense-balance__highlight">{{ balance.category }}</span>
+        <span>, que est&aacute; gastando </span>
+        <span class="expense-balance__highlight">{{ formattedPercentage() }}%</span>
+        <span> do total das receitas do m&ecirc;s.</span>
+      </strong>
+    </div>
+  </div>
+</section>

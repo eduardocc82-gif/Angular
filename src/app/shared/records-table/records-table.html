@@ -3,7 +3,7 @@
   <div class="section-heading records-table__heading">
     <div>
       <h2>{{ title }}</h2>
-      <p>{{ records.length }} registro(s) encontrado(s)</p>
+      <p>{{ sortedRecords.length }} registro(s) encontrado(s)</p>
     </div>
   </div>
 
@@ -20,15 +20,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let record of records; trackBy: trackById">
+        <tr *ngFor="let record of sortedRecords; trackBy: trackById">
           <td>
             <strong>{{ record.description }}</strong>
-            <small>ID oculto: {{ record.id.slice(0, 8) }}</small>
+            <!-- <small>ID oculto: {{ record.id.slice(0, 8) }}</small> -->
           </td>
-          <td><span [class]="typeClass(record.type)">{{ typeLabel(record.type) }}</span></td>
+          <td>
+            <span [class]="typeClass(record.type)">{{ typeLabel(record.type) }}</span>
+          </td>
           <td>{{ record.category }}</td>
-          <td>{{ record.date | date: 'dd/MM/yyyy' }}</td>
-          <td class="text-end fw-bold">{{ record.value | currency: 'BRL' : 'symbol' : '1.2-2' }}</td>
+          <td>{{ formatDate(record.date) }}</td>
+          <td class="text-end fw-bold">
+            {{ record.value | currency: 'BRL' : 'symbol' : '1.2-2' }}
+          </td>
           <td class="text-end">
             <button
               type="button"
@@ -41,8 +45,10 @@
             </button>
           </td>
         </tr>
-        <tr *ngIf="records.length === 0">
-          <td colspan="6" class="records-table__empty">Nenhum lançamento encontrado para os filtros atuais.</td>
+        <tr *ngIf="sortedRecords.length === 0">
+          <td colspan="6" class="records-table__empty">
+            Nenhum lançamento encontrado para os filtros atuais.
+          </td>
         </tr>
       </tbody>
     </table>

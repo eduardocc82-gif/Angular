@@ -15,6 +15,7 @@ export class Configuracoes implements OnInit, OnDestroy {
   profiles: ProfileConfig[] = [];
   selectedProfileId: ProfileConfig['id'] = 'conservador';
   draftPercentages: Record<string, number> = {};
+  draftExpenseBalanceThresholdPercentage = 50;
   message = '';
 
   private subscription = new Subscription();
@@ -23,15 +24,18 @@ export class Configuracoes implements OnInit, OnDestroy {
 
   // Mantém a tela sincronizada com localStorage.
   ngOnInit(): void {
-    this.subscription = combineLatest([this.finance.profiles$, this.finance.selectedProfileId$]).subscribe(
-      ([profiles, selectedProfileId]) => {
-        this.profiles = profiles;
-        this.selectedProfileId = selectedProfileId;
-        profiles.forEach((profile) => {
-          this.draftPercentages[profile.id] = this.draftPercentages[profile.id] ?? profile.percentage;
-        });
-      },
-    );
+    this.subscription = combineLatest([
+      this.finance.profiles$,
+      this.finance.selectedProfileId$,
+      this.finance.settings$,
+    ]).subscribe(([profiles, selectedProfileId, settings]) => {
+      this.profiles = profiles;
+      this.selectedProfileId = selectedProfileId;
+      this.draftExpenseBalanceThresholdPercentage = settings.expenseBalanceThresholdPercentage;
+      profiles.forEach((profile) => {
+        this.draftPercentages[profile.id] = this.draftPercentages[profile.id] ?? profile.percentage;
+      });
+    });
   }
 
   // Evita vazamento de subscription.
@@ -46,6 +50,12 @@ export class Configuracoes implements OnInit, OnDestroy {
     this.message = `Perfil ${profile.label} atualizado.`;
   }
 
+  // Persiste o limite usado para marcar despesas como desbalanceadas.
+  saveExpenseBalanceThreshold(): void {
+    this.finance.updateExpenseBalanceThreshold(this.draftExpenseBalanceThresholdPercentage);
+    this.message = 'Percentual de balanceamento atualizado.';
+  }
+
   // Atualiza o perfil ativo usado na projeção.
   selectProfile(profileId: ProfileConfig['id']): void {
     this.finance.selectProfile(profileId);
@@ -55,6 +65,7 @@ export class Configuracoes implements OnInit, OnDestroy {
   // Restaura dados demonstrativos para avaliação do projeto.
   resetDemoData(): void {
     this.draftPercentages = {};
+    this.draftExpenseBalanceThresholdPercentage = 50;
     this.finance.resetDemoData();
     this.message = 'Dados demonstrativos restaurados.';
   }

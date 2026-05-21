@@ -45,9 +45,5 @@
 
   <app-goal-projection [profile]="selectedProfile" [projection]="projection"></app-goal-projection>
 
-  <app-chart-panel
-    title="Despesas do mês por categoria"
-    mode="category"
-    [records]="currentMonthRecords"
-  ></app-chart-panel>
+  <app-expense-balance [balance]="expenseBalance"></app-expense-balance>
 </section>

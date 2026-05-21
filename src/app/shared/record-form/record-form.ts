@@ -14,6 +14,7 @@ export class RecordForm implements OnInit, OnChanges {
   @Input() lockedType: TransactionType | null = null;
   @Input() title = 'Novo lançamento';
   @Input() submitLabel = 'Salvar lançamento';
+  @Input() descricaoPlaceholder = 'Ex: Conta de luz';
 
   // O formulário comunica o novo registro ao pai por @Output.
   @Output() saveRecord = new EventEmitter<NewFinancialRecord>();
@@ -34,7 +35,7 @@ export class RecordForm implements OnInit, OnChanges {
     type: 'saida',
     category: 'Outros',
     date: this.today,
-    value: 0,
+    value: 0,  
   };
   categories: string[] = [];
   errorMessage = '';

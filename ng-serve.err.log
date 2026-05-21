@@ -1,0 +1,26 @@
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'number' is not assignable to type '"leve" | "conservador" | "arrojado"'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/finance.ts:86:6:
+[37m      86 │       [32mid[37m: 222,
+         ╵       [32m~~[0m
+
+  The expected type comes from property 'id' which is declared here on type 'ProfileConfig'
+
+    src/app/models/finance.models.ts:32:2:
+[37m      32 │   [32mid[37m: 'leve' | 'conservador' | 'arrojado';
+         ╵   [32m~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string' is not assignable to type 'number'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/finance.ts:88:6:
+[37m      88 │       [32mpercentage[37m: "90",
+         ╵       [32m~~~~~~~~~~[0m
+
+  The expected type comes from property 'percentage' which is declared here on type 'ProfileConfig'
+
+    src/app/models/finance.models.ts:34:2:
+[37m      34 │   [32mpercentage[37m: number;
+         ╵   [32m~~~~~~~~~~[0m
+
+[39m[22m

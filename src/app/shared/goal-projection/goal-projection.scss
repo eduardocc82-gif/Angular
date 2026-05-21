@@ -13,25 +13,66 @@
 }
 
 .goal-projection p,
-.goal-projection__row span,
+.goal-projection__metric-label,
+.goal-projection__metric-note,
+.goal-projection__metric-line span,
 .goal-projection__status span {
   color: var(--app-muted);
 }
 
-.goal-projection__badge {
-  border-radius: 999px;
-  color: #ffffff;
-  font-size: 0.8rem;
-  font-weight: 800;
-  min-width: 74px;
-  padding: 0.45rem 0.75rem;
-  text-align: center;
+.goal-projection__heading {
+  margin-bottom: 0;
 }
 
-.goal-projection__row {
+.goal-projection__metrics {
   display: flex;
-  justify-content: space-between;
   gap: 1rem;
+}
+
+.goal-projection__metric {
+  background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.04);
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 1.05rem 1.1rem;
+}
+
+.goal-projection__metric-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.goal-projection__metric-line {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.38rem;
+}
+
+.goal-projection__metric-value {
+  color: var(--app-text);
+  font-size: 1.9rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.goal-projection__metric-text {
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.goal-projection__metric-note {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 650;
+  margin-top: 0.55rem;
 }
 
 .goal-projection__bar {
@@ -63,7 +104,6 @@
   display: block;
 }
 
-.goal-projection--positiva .goal-projection__badge,
 .goal-projection--positiva .goal-projection__bar div {
   background: var(--app-green);
 }
@@ -72,7 +112,6 @@
   color: var(--app-green);
 }
 
-.goal-projection--alerta .goal-projection__badge,
 .goal-projection--alerta .goal-projection__bar div {
   background: var(--app-yellow);
 }
@@ -81,7 +120,6 @@
   color: var(--app-yellow);
 }
 
-.goal-projection--negativa .goal-projection__badge,
 .goal-projection--negativa .goal-projection__bar div {
   background: var(--app-red);
 }
@@ -91,8 +129,11 @@
 }
 
 @media (max-width: 640px) {
-  .goal-projection__row {
-    align-items: flex-start;
+  .goal-projection__metrics {
     flex-direction: column;
+  }
+
+  .goal-projection__metric-value {
+    font-size: 1.48rem;
   }
 }

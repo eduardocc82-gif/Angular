@@ -1,6 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FinancialRecord, NewFinancialRecord, ProfileConfig, RecordFilters } from '../models/finance.models';
+import {
+  FinancialRecord,
+  NewFinancialRecord,
+  ProfileConfig,
+  RecordFilters,
+} from '../models/finance.models';
 import { Finance } from './finance';
 
 describe('Finance', () => {
@@ -73,6 +78,23 @@ describe('Finance', () => {
     expect(filteredRecords[0].description).toBe('Aluguel');
   });
 
+  it('deve devolver registros filtrados em data crescente', () => {
+    const filters: RecordFilters = {
+      month: 'todos',
+      category: 'todas',
+      type: 'todos',
+    };
+
+    const filteredRecords = service.filterRecords(records, filters);
+
+    expect(filteredRecords.map((record) => record.date)).toEqual([
+      '2026-04-10',
+      '2026-05-05',
+      '2026-05-06',
+      '2026-05-07',
+    ]);
+  });
+
   it('deve calcular projeção de meta com limite e status', () => {
     const profile: ProfileConfig = {
       id: 'conservador',
@@ -85,8 +107,67 @@ describe('Finance', () => {
 
     expect(projection.limit).toBe(2500);
     expect(projection.spent).toBe(1900);
+    expect(projection.spentPercentageOfIncome).toBe(38);
+    expect(projection.usagePercent).toBe(76);
     expect(projection.status).toBe('positiva');
     expect(projection.dailyMargin).toBeGreaterThanOrEqual(0);
+  });
+
+  it('deve indicar despesas balanceadas quando nenhuma categoria passa de 50% das receitas', () => {
+    const balance = service.calculateExpenseBalance(records);
+
+    expect(balance.status).toBe('positiva');
+    expect(balance.message).toContain('bem balanceada');
+  });
+
+  it('deve indicar despesa desbalanceada quando uma categoria passa de 50% das receitas', () => {
+    const balance = service.calculateExpenseBalance([
+      ...records,
+      {
+        id: 'saida-3',
+        description: 'Condominio',
+        type: 'saida',
+        category: 'Moradia',
+        date: '2026-05-08',
+        value: 1200,
+      },
+    ]);
+
+    expect(balance.status).toBe('negativa');
+    expect(balance.category).toBe('Moradia');
+    expect(balance.percentageOfIncome).toBe(54);
+    expect(balance.message).toContain('Verifique o item Moradia');
+  });
+
+  it('deve usar percentual configurado para avaliar despesa desbalanceada', () => {
+    service.updateExpenseBalanceThreshold(60);
+
+    const balance = service.calculateExpenseBalance([
+      ...records,
+      {
+        id: 'saida-3',
+        description: 'Condominio',
+        type: 'saida',
+        category: 'Moradia',
+        date: '2026-05-08',
+        value: 1200,
+      },
+    ]);
+
+    expect(service.expenseBalanceThresholdPercentage).toBe(60);
+    expect(balance.status).toBe('positiva');
+    expect(localStorage.getItem('controle-financeiro-angular.settings.v1')).toContain('60');
+  });
+
+  it('deve limitar percentual configurado entre 30% e 100% e voltar para 50% na demo', () => {
+    service.updateExpenseBalanceThreshold(20);
+    expect(service.expenseBalanceThresholdPercentage).toBe(30);
+
+    service.updateExpenseBalanceThreshold(120);
+    expect(service.expenseBalanceThresholdPercentage).toBe(100);
+
+    service.resetDemoData();
+    expect(service.expenseBalanceThresholdPercentage).toBe(50);
   });
 
   it('deve adicionar registro com ID gerado e persistir no localStorage', () => {
@@ -103,7 +184,9 @@ describe('Finance', () => {
 
     expect(createdRecord.description).toBe('Conta de luz');
     expect(createdRecord.id).toBeTruthy();
-    expect(localStorage.getItem('controle-financeiro-angular.records.v1')).toContain('Conta de luz');
+    expect(localStorage.getItem('controle-financeiro-angular.records.v2')).toContain(
+      'Conta de luz',
+    );
   });
 
   it('deve remover registro persistido', () => {

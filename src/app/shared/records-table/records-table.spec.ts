@@ -47,6 +47,15 @@ describe('RecordsTable', () => {
     expect(tableText).toContain('2 registro(s) encontrado(s)');
   });
 
+  it('deve ordenar registros por data crescente antes de exibir', () => {
+    component.records = [
+      { ...records[1], date: '2026-05-20' },
+      { ...records[0], date: '2026-05-01' },
+    ];
+
+    expect(component.sortedRecords.map((record) => record.date)).toEqual(['2026-05-01', '2026-05-20']);
+  });
+
   it('deve emitir o ID do registro ao clicar em excluir', () => {
     const spy = vi.spyOn(component.deleteRecord, 'emit');
     const deleteButton = fixture.nativeElement.querySelector('button[aria-label="Excluir Salário"]') as HTMLButtonElement;

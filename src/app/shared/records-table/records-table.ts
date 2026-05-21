@@ -17,6 +17,19 @@ export class RecordsTable {
   // Exclusão enviada ao pai por @Output, conforme requisito.
   @Output() deleteRecord = new EventEmitter<string>();
 
+  // Garante exibicao cronologica mesmo quando o pai envia registros fora de ordem.
+  get sortedRecords(): FinancialRecord[] {
+    return [...this.records].sort((currentRecord, nextRecord) => {
+      const dateOrder = currentRecord.date.localeCompare(nextRecord.date);
+
+      if (dateOrder !== 0) {
+        return dateOrder;
+      }
+
+      return currentRecord.description.localeCompare(nextRecord.description, 'pt-BR');
+    });
+  }
+
   // Identificador estável para renderização eficiente da tabela.
   trackById(_index: number, record: FinancialRecord): string {
     return record.id;
@@ -36,5 +49,10 @@ export class RecordsTable {
   // Classe visual do chip de tipo.
   typeClass(type: FinancialRecord['type']): string {
     return `type-pill type-pill--${type}`;
+  }
+
+  // Formata data ISO como data local para evitar deslocamento por timezone no pipe date.
+  formatDate(dateValue: string): string {
+    return new Intl.DateTimeFormat('pt-BR').format(new Date(`${dateValue}T00:00:00`));
   }
 }

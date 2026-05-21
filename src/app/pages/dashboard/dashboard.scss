@@ -10,23 +10,90 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+  position: relative;
 }
 
 .dashboard-page__hero .btn {
   align-items: center;
   display: inline-flex;
   gap: 0.45rem;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   white-space: nowrap;
 }
 
+.dashboard-page__month-title {
+  flex: 1 1 auto;
+  font-size: clamp(2.4rem, 6vw, 4.7rem);
+  font-weight: 800;
+  line-height: 1;
+  margin: 0;
+  text-align: center;
+  text-transform: lowercase;
+}
+
 .dashboard-page__cards {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 1rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .dashboard-page__cards app-summary-card {
-  flex: 1 1 230px;
+  display: block;
+  min-width: 0;
+}
+
+.dashboard-page__profiles-title {
+  font-size: clamp(1.35rem, 2.3vw, 2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin: -0.15rem 0 -0.4rem;
+  text-align: center;
+}
+
+.dashboard-page__profiles {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dashboard-page__charts app-chart-panel,
+.dashboard-page__cashflow {
+  min-width: 0;
+}
+
+.dashboard-page__profile {
+  background: #ffffff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem;
+  text-align: left;
+}
+
+.dashboard-page__profile strong {
+  font-size: 1.1rem;
+}
+
+.dashboard-page__profile span {
+  color: var(--app-blue);
+  font-weight: 800;
+}
+
+.dashboard-page__profile small {
+  color: var(--app-muted);
+}
+
+.dashboard-page__profile--active {
+  border-color: #111827;
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+
+.dashboard-page__cashflow {
+  display: block;
 }
 
 .dashboard-page__charts {
@@ -35,7 +102,19 @@
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
 }
 
+.dashboard-page__annual-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
 @media (max-width: 920px) {
+  .dashboard-page__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-page__profiles,
   .dashboard-page__charts {
     grid-template-columns: 1fr;
   }
@@ -43,16 +122,18 @@
 
 @media (max-width: 700px) {
   .dashboard-page__hero {
-    align-items: flex-start;
+    align-items: stretch;
     flex-direction: column;
   }
 
   .dashboard-page__hero .btn {
+    position: static;
+    transform: none;
     width: 100%;
     justify-content: center;
   }
 
   .dashboard-page__cards {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 }

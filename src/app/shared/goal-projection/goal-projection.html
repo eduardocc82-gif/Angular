@@ -1,21 +1,36 @@
 <!-- Projeção de metas por perfil financeiro. -->
 <section class="finance-card goal-projection" [ngClass]="statusClass()" *ngIf="profile && projection">
-  <div class="section-heading">
+  <div class="section-heading goal-projection__heading">
     <div>
-      <h2>Projeção de Meta - Perfil {{ profile.label }}</h2>
-      <p>{{ profile.description }}</p>
+      <!-- <h2>Projeção de Meta - Perfil {{ profile.label }}</h2> -->
+      <!-- <p>{{ profile.description }}</p>-->
     </div>
-    <span class="goal-projection__badge">{{ projection.usagePercent | number: '1.1-1' }}%</span>
   </div>
 
-  <div class="goal-projection__row">
-    <span>Limite de gastos ({{ profile.percentage }}%)</span>
-    <strong>{{ projection.limit | currency: 'BRL' : 'symbol' : '1.2-2' }}</strong>
-  </div>
+  <div class="goal-projection__metrics">
+    <div class="goal-projection__metric">
+      <span class="goal-projection__metric-label">Uso da meta</span>
+      <div class="goal-projection__metric-line">
+        <strong class="goal-projection__metric-value">{{ projection.spentPercentageOfIncome | number: '1.0-0' }}%</strong>
+        <span class="goal-projection__metric-text">usado de</span>
+        <strong class="goal-projection__metric-value">{{ profile.percentage }}%</strong>
+        <span class="goal-projection__metric-text">das entradas</span>
+      </div>
+    </div>
 
-  <div class="goal-projection__row">
-    <span>Gastos atuais</span>
-    <strong>{{ projection.spent | currency: 'BRL' : 'symbol' : '1.2-2' }}</strong>
+    <div class="goal-projection__metric">
+      <span class="goal-projection__metric-label">Gastos atuais</span>
+      <div class="goal-projection__metric-line">
+        <strong class="goal-projection__metric-value">
+          {{ projection.spent | currency: 'BRL' : 'symbol' : '1.2-2' }}
+        </strong>
+        <span class="goal-projection__metric-text">de</span>
+        <strong class="goal-projection__metric-value">
+          {{ projection.limit | currency: 'BRL' : 'symbol' : '1.2-2' }}
+        </strong>
+        <span class="goal-projection__metric-text">limite da meta</span>
+      </div>
+    </div>
   </div>
 
   <div class="goal-projection__bar" aria-label="Uso da meta">

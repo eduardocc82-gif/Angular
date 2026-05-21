@@ -6,6 +6,7 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { Investimentos } from './pages/investimentos/investimentos';
 import { Lancamentos } from './pages/lancamentos/lancamentos';
 import { Metas } from './pages/metas/metas';
+import { Relatorios } from './pages/relatorios/relatorios';
 
 // Rotas principais pedidas na especificação, com alias para o typo "configuacoes".
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'lancamentos', component: Lancamentos },
   { path: 'metas', component: Metas },
   { path: 'investimentos', component: Investimentos },
+  { path: 'relatorios', component: Relatorios },
   { path: 'configuracoes', component: Configuracoes },
   { path: 'configuacoes', redirectTo: 'configuracoes', pathMatch: 'full' },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -21,6 +23,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

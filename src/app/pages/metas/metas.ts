@@ -1,7 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { combineLatest, Subscription } from 'rxjs';
 
-import { FinancialRecord, ProfileConfig, ProjectionResult, SummaryTotals } from '../../models/finance.models';
+import {
+  ExpenseBalanceResult,
+  FinancialRecord,
+  ProfileConfig,
+  ProjectionResult,
+  SummaryTotals,
+} from '../../models/finance.models';
 import { Finance } from '../../services/finance';
 
 @Component({
@@ -15,6 +21,7 @@ export class Metas implements OnInit, OnDestroy {
   records: FinancialRecord[] = [];
   profiles: ProfileConfig[] = [];
   selectedProfileId: ProfileConfig['id'] = 'conservador';
+  expenseBalanceThresholdPercentage = 50;
 
   private subscription = new Subscription();
 
@@ -26,10 +33,12 @@ export class Metas implements OnInit, OnDestroy {
       this.finance.records$,
       this.finance.profiles$,
       this.finance.selectedProfileId$,
-    ]).subscribe(([records, profiles, selectedProfileId]) => {
+      this.finance.settings$,
+    ]).subscribe(([records, profiles, selectedProfileId, settings]) => {
       this.records = records;
       this.profiles = profiles;
       this.selectedProfileId = selectedProfileId;
+      this.expenseBalanceThresholdPercentage = settings.expenseBalanceThresholdPercentage;
     });
   }
 
@@ -62,6 +71,14 @@ export class Metas implements OnInit, OnDestroy {
     return this.selectedProfile
       ? this.finance.calculateProjection(this.currentMonthRecords, this.selectedProfile)
       : null;
+  }
+
+  // Balanceamento das despesas por categoria em relacao as entradas do mes atual.
+  get expenseBalance(): ExpenseBalanceResult {
+    return this.finance.calculateExpenseBalance(
+      this.currentMonthRecords,
+      this.expenseBalanceThresholdPercentage,
+    );
   }
 
   // Seleciona um perfil e persiste no Service.

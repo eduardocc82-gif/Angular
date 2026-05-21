@@ -35,6 +35,11 @@ export interface ProfileConfig {
   description: string;
 }
 
+// Configuracoes gerais ajustaveis pelo usuario.
+export interface FinanceSettingsConfig {
+  expenseBalanceThresholdPercentage: number;
+}
+
 // Soma consolidada exibida nos cards de resumo.
 export interface SummaryTotals {
   entradas: number;
@@ -47,10 +52,19 @@ export interface SummaryTotals {
 export interface ProjectionResult {
   limit: number;
   spent: number;
+  spentPercentageOfIncome: number;
   usagePercent: number;
   dailyMargin: number;
   status: 'positiva' | 'alerta' | 'negativa';
   message: string;
+}
+
+// Resultado da regra de balanceamento das despesas por categoria.
+export interface ExpenseBalanceResult {
+  status: 'positiva' | 'negativa';
+  message: string;
+  category?: string;
+  percentageOfIncome?: number;
 }
 
 // Pacote de categorias padrão, sempre encerrando com "Outros".
