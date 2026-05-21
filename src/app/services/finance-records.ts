@@ -3,7 +3,6 @@ import { BehaviorSubject } from 'rxjs';
 
 import { FinancialRecord, NewFinancialRecord, TransactionType } from '../models/finance.models';
 
-
 type MockRecordRow = readonly [
   id: string,
   description: string,
