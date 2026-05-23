@@ -5,49 +5,6 @@
   padding: 1.15rem;
 }
 
-.filter-bar__intro {
-  align-items: center;
-  border-bottom: 1px solid rgba(229, 231, 235, 0.9);
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 1rem;
-}
-
-.filter-bar__title-group {
-  align-items: center;
-  display: flex;
-  gap: 0.8rem;
-  min-width: 0;
-}
-
-.filter-bar__title-icon {
-  align-items: center;
-  background: rgba(59, 130, 246, 0.12);
-  border-radius: 8px;
-  color: #1d4ed8;
-  display: inline-flex;
-  flex: 0 0 auto;
-  font-size: 1.05rem;
-  height: 2.35rem;
-  justify-content: center;
-  width: 2.35rem;
-}
-
-.filter-bar__title-group h2 {
-  color: var(--app-text);
-  font-size: 1rem;
-  font-weight: 850;
-  line-height: 1.2;
-  margin: 0;
-}
-
-.filter-bar__title-group p {
-  color: var(--app-muted);
-  font-size: 0.84rem;
-  line-height: 1.35;
-  margin: 0.18rem 0 0;
-}
-
 .filter-bar__controls {
   display: grid;
   gap: 0.9rem;
@@ -118,13 +75,5 @@
 @media (max-width: 640px) {
   .filter-bar {
     padding: 1rem;
-  }
-
-  .filter-bar__title-group {
-    align-items: flex-start;
-  }
-
-  .filter-bar__title-group p {
-    font-size: 0.8rem;
   }
 }
