@@ -39,22 +39,8 @@
   box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
 }
 
-.metas-page__cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.metas-page__cards app-summary-card {
-  flex: 1 1 230px;
-}
-
 @media (max-width: 820px) {
   .metas-page__profiles {
     grid-template-columns: 1fr;
-  }
-
-  .metas-page__cards {
-    flex-direction: column;
   }
 }

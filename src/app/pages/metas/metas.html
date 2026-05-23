@@ -19,31 +19,5 @@
     </button>
   </div>
 
-  <div class="metas-page__cards">
-    <app-summary-card
-      title="Entradas do mês"
-      [value]="summary.entradas"
-      helper="Base da meta"
-      icon="bi-graph-up-arrow"
-      tone="green"
-    ></app-summary-card>
-    <app-summary-card
-      title="Saídas do mês"
-      [value]="summary.saidas"
-      helper="Consumo atual"
-      icon="bi-graph-down-arrow"
-      tone="red"
-    ></app-summary-card>
-    <app-summary-card
-      title="Saldo"
-      [value]="summary.saldo"
-      helper="Depois das saídas"
-      icon="bi-wallet2"
-      tone="blue"
-    ></app-summary-card>
-  </div>
-
   <app-goal-projection [profile]="selectedProfile" [projection]="projection"></app-goal-projection>
-
-  <app-expense-balance [balance]="expenseBalance"></app-expense-balance>
 </section>

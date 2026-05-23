@@ -118,6 +118,10 @@ describe('Finance', () => {
 
     expect(balance.status).toBe('positiva');
     expect(balance.message).toContain('bem balanceada');
+    expect(balance.largestExpense?.description).toBe('Aluguel');
+    expect(balance.largestExpense?.percentageOfIncome).toBe(30);
+    expect(balance.limitValue).toBe(2500);
+    expect(balance.thresholdPercentage).toBe(50);
   });
 
   it('deve indicar despesa desbalanceada quando uma categoria passa de 50% das receitas', () => {
@@ -135,8 +139,10 @@ describe('Finance', () => {
 
     expect(balance.status).toBe('negativa');
     expect(balance.category).toBe('Moradia');
+    expect(balance.categoryExpenseValue).toBe(2700);
     expect(balance.percentageOfIncome).toBe(54);
-    expect(balance.message).toContain('Verifique o item Moradia');
+    expect(balance.limitValue).toBe(2500);
+    expect(balance.message).toContain('desbalanceadas');
   });
 
   it('deve usar percentual configurado para avaliar despesa desbalanceada', () => {

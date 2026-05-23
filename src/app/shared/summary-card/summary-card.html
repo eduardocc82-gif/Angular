@@ -1,5 +1,14 @@
 <!-- Card reutilizável para entradas, saídas, saldo e investimentos. -->
-<article class="summary-card" [ngClass]="'summary-card--' + tone">
+<article
+  class="summary-card"
+  [class.summary-card--interactive]="interactive"
+  [attr.role]="interactive ? 'button' : null"
+  [attr.tabindex]="interactive ? '0' : null"
+  [ngClass]="'summary-card--' + tone"
+  (click)="activate($event)"
+  (keydown.enter)="activate($event)"
+  (keydown.space)="activate($event)"
+>
   <div class="summary-card__header">
     <span>{{ title }}</span>
     <i class="bi" [ngClass]="icon"></i>

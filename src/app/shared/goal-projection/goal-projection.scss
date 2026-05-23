@@ -1,8 +1,14 @@
 /* Painel de meta com barra de progresso parecida com o modelo. */
+:host {
+  display: block;
+  height: 100%;
+}
+
 .goal-projection {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  height: 100%;
   padding: 1.2rem;
 }
 
@@ -13,7 +19,6 @@
 }
 
 .goal-projection p,
-.goal-projection__metric-label,
 .goal-projection__metric-note,
 .goal-projection__metric-line span,
 .goal-projection__status span {
@@ -40,18 +45,42 @@
 }
 
 .goal-projection__metric-label {
-  display: block;
-  font-size: 0.82rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
+  align-items: center;
+  color: var(--app-text);
+  display: inline-flex;
+  font-size: 0.95rem;
+  font-weight: 850;
+  gap: 0.5rem;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+}
+
+.goal-projection__metric-label i {
+  align-items: center;
+  border-radius: 8px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.96rem;
+  height: 1.85rem;
+  justify-content: center;
+  width: 1.85rem;
+}
+
+.goal-projection__metric-label--usage i {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+}
+
+.goal-projection__metric-label--spent i {
+  background: rgba(239, 68, 68, 0.1);
+  color: #b91c1c;
 }
 
 .goal-projection__metric-line {
-  align-items: baseline;
+  align-items: flex-start;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.38rem;
+  flex-direction: column;
+  gap: 0.45rem;
 }
 
 .goal-projection__metric-value {
@@ -63,9 +92,23 @@
 }
 
 .goal-projection__metric-text {
+  color: var(--app-muted);
   font-size: 0.98rem;
-  font-weight: 600;
+  font-weight: 650;
   line-height: 1.2;
+}
+
+.goal-projection__metric-limit {
+  align-items: center;
+  background: #f3f4f6;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  color: var(--app-text);
+  display: inline-flex;
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1;
+  padding: 0.42rem 0.65rem;
 }
 
 .goal-projection__metric-note {

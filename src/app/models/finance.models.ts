@@ -64,7 +64,16 @@ export interface ExpenseBalanceResult {
   status: 'positiva' | 'negativa';
   message: string;
   category?: string;
+  categoryExpenseValue?: number;
+  largestExpense?: {
+    category: string;
+    description: string;
+    percentageOfIncome: number;
+    value: number;
+  };
+  limitValue: number;
   percentageOfIncome?: number;
+  thresholdPercentage: number;
 }
 
 // Pacote de categorias padrão, sempre encerrando com "Outros".

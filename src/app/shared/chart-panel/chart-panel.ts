@@ -104,12 +104,8 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     if (this.mode === 'closingBalance') {
-      const currentYear = new Date().getFullYear();
-
       return this.records.some(
-        (record) =>
-          record.date.startsWith(`${currentYear}-`) &&
-          (record.type === 'entrada' || record.type === 'saida'),
+        (record) => record.type === 'entrada' || record.type === 'saida',
       );
     }
 
@@ -167,7 +163,7 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
     const saidas = this.hideFutureValues(cashFlow.saidas, futureStartAnchorIndex);
 
     return {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: cashFlow.labels,
         datasets: [
@@ -175,23 +171,19 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
             label: 'Entradas',
             data: entradas,
             borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.12)',
-            fill: false,
-            pointBackgroundColor: '#10b981',
-            pointBorderColor: '#10b981',
-            pointRadius: 3,
-            tension: 0.28,
+            backgroundColor: 'rgba(16, 185, 129, 0.78)',
+            borderRadius: 6,
+            borderWidth: 1,
+            maxBarThickness: 28,
           },
           {
             label: 'Saídas',
             data: saidas,
             borderColor: '#ef4444',
-            backgroundColor: 'rgba(239, 68, 68, 0.12)',
-            fill: false,
-            pointBackgroundColor: '#ef4444',
-            pointBorderColor: '#ef4444',
-            pointRadius: 3,
-            tension: 0.28,
+            backgroundColor: 'rgba(239, 68, 68, 0.78)',
+            borderRadius: 6,
+            borderWidth: 1,
+            maxBarThickness: 28,
           },
         ],
       },
@@ -222,8 +214,9 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
               text: 'Dia',
             },
             ticks: {
-              autoSkip: true,
-              maxTicksLimit: 16,
+              autoSkip: false,
+              maxRotation: 0,
+              minRotation: 0,
             },
           },
           y: {
@@ -254,7 +247,7 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
         labels: closingBalance.labels,
         datasets: [
           {
-            label: 'Saldo acumulado anual',
+            label: 'Saldo acumulado no período',
             data: closingBalance.values,
             borderColor: '#2563eb',
             backgroundColor: 'rgba(37, 99, 235, 0.1)',
@@ -354,21 +347,17 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
     };
   }
 
-  // Calcula o saldo acumulado do ano corrente no fechamento de cada mes.
+  // Calcula o saldo acumulado de todo o periodo registrado, mes a mes.
   private buildMonthlyClosingBalance(): {
     labels: string[];
     months: string[];
     values: number[];
   } {
     const totals = new Map<string, { entrada: number; saida: number }>();
-    const today = new Date();
-    const currentYear = today.getFullYear();
 
     this.records
       .filter(
-        (record) =>
-          record.date.startsWith(`${currentYear}-`) &&
-          (record.type === 'entrada' || record.type === 'saida'),
+        (record) => record.type === 'entrada' || record.type === 'saida',
       )
       .forEach((record) => {
         const month = record.date.slice(0, 7);
@@ -385,16 +374,11 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
         totals.set(month, current);
       });
 
-    const currentMonthNumber = today.getMonth() + 1;
-    const recordedMonthNumbers = Array.from(totals.keys()).map((month) =>
-      Number(month.slice(5, 7)),
-    );
-    const lastMonthNumber = Math.max(currentMonthNumber, ...recordedMonthNumbers);
-    const months = Array.from({ length: lastMonthNumber }, (_value, index) => {
-      const month = String(index + 1).padStart(2, '0');
-
-      return `${currentYear}-${month}`;
-    });
+    const recordedMonths = Array.from(totals.keys()).sort();
+    const months =
+      recordedMonths.length > 0
+        ? this.listMonthsBetween(recordedMonths[0], recordedMonths[recordedMonths.length - 1])
+        : [];
     let accumulatedBalance = 0;
 
     return {
@@ -523,6 +507,23 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
       entradas: months.map((month) => totals.get(month)?.entrada ?? 0),
       saidas: months.map((month) => totals.get(month)?.saida ?? 0),
     };
+  }
+
+  // Lista meses consecutivos no formato YYYY-MM, incluindo inicio e fim.
+  private listMonthsBetween(startMonth: string, endMonth: string): string[] {
+    const [startYear, startMonthNumber] = startMonth.split('-').map(Number);
+    const [endYear, endMonthNumber] = endMonth.split('-').map(Number);
+    const cursor = new Date(startYear, startMonthNumber - 1, 1);
+    const end = new Date(endYear, endMonthNumber - 1, 1);
+    const months: string[] = [];
+
+    while (cursor <= end) {
+      const month = String(cursor.getMonth() + 1).padStart(2, '0');
+      months.push(`${cursor.getFullYear()}-${month}`);
+      cursor.setMonth(cursor.getMonth() + 1);
+    }
+
+    return months;
   }
 
   // Resolve o mes usado por graficos dependentes de um periodo unico.

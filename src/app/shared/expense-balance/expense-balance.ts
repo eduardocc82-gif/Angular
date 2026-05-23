@@ -34,4 +34,39 @@ export class ExpenseBalance {
       maximumFractionDigits: 2,
     });
   }
+
+  /** Valor limite atual para a categoria mais concentrada. */
+  formattedLimitValue(): string {
+    return this.formatCurrency(this.balance?.limitValue ?? 0);
+  }
+
+  /** Valor total gasto na categoria que ultrapassou o limite. */
+  formattedCategoryExpenseValue(): string {
+    return this.formatCurrency(this.balance?.categoryExpenseValue ?? 0);
+  }
+
+  /** Percentual limite configurado para o balanceamento. */
+  formattedThresholdPercentage(): string {
+    return (this.balance?.thresholdPercentage ?? 0).toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
+
+  /** Valor da maior despesa individual do mes. */
+  formattedLargestExpenseValue(): string {
+    return this.formatCurrency(this.balance?.largestExpense?.value ?? 0);
+  }
+
+  /** Percentual da maior despesa individual sobre as receitas do mes. */
+  formattedLargestExpensePercentage(): string {
+    return (this.balance?.largestExpense?.percentageOfIncome ?? 0).toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
+
+  private formatCurrency(value: number): string {
+    return new Intl.NumberFormat('pt-BR', { currency: 'BRL', style: 'currency' }).format(value);
+  }
 }

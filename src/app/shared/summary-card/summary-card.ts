@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-summary-card',
@@ -12,5 +12,16 @@ export class SummaryCard {
   @Input() value = 0;
   @Input() helper = '';
   @Input() icon = 'bi-wallet2';
+  @Input() interactive = false;
   @Input() tone: 'green' | 'red' | 'blue' | 'yellow' = 'blue';
+  @Output() cardClick = new EventEmitter<void>();
+
+  activate(event?: Event): void {
+    if (!this.interactive) {
+      return;
+    }
+
+    event?.preventDefault();
+    this.cardClick.emit();
+  }
 }

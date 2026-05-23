@@ -1,7 +1,10 @@
 <!-- Dashboard principal com cards, meta, filtros, tabela e gráficos. -->
 <section class="page-shell dashboard-page">
   <div class="dashboard-page__hero">
-    <h1 class="dashboard-page__month-title">{{ analysisMonthLabel }}</h1>
+    <div class="dashboard-page__period">
+      <span class="dashboard-page__period-label">Período em análise</span>
+      <h1 class="dashboard-page__month-title">{{ analysisMonthLabel }}</h1>
+    </div>
     <a class="btn btn-dark" routerLink="/lancamentos">
       <i class="bi bi-plus-circle"></i>
       Novo lançamento
@@ -43,37 +46,16 @@
       [value]="walletBalanceToday"
       helper="Entradas - despesas até hoje"
       icon="bi-cash-coin"
+      [interactive]="true"
       [tone]="walletBalanceTone"
+      (cardClick)="scrollToClosingBalance()"
     ></app-summary-card>
   </div>
 
-  <h2 class="dashboard-page__profiles-title">Escolha sua meta</h2>
-
-  <div class="dashboard-page__profiles">
-    <button
-      *ngFor="let profile of profiles"
-      type="button"
-      class="finance-card dashboard-page__profile"
-      [class.dashboard-page__profile--active]="profile.id === selectedProfileId"
-      (click)="selectProfile(profile.id)"
-    >
-      <strong>{{ profile.label }}</strong>
-      <span>{{ profile.percentage }}% das entradas</span>
-      <small>{{ profile.description }}</small>
-    </button>
+  <div class="dashboard-page__status-grid">
+    <app-goal-projection [profile]="selectedProfile" [projection]="projection"></app-goal-projection>
+    <app-expense-balance [balance]="expenseBalance"></app-expense-balance>
   </div>
-
-  <app-goal-projection [profile]="selectedProfile" [projection]="projection"></app-goal-projection>
-
-  <app-expense-balance [balance]="expenseBalance"></app-expense-balance>
-
-  <app-chart-panel
-    class="dashboard-page__cashflow"
-    [title]="cashFlowTitle"
-    mode="cashflow"
-    [records]="records"
-    [monthKey]="cashFlowMonth"
-  ></app-chart-panel>
 
   <app-filter-bar
     [months]="months"
@@ -94,17 +76,17 @@
       mode="category"
       [records]="filteredRecords"
     ></app-chart-panel>
-    <div class="dashboard-page__annual-stack">
-      <app-chart-panel
-        title="Evolução mensal - Entradas vs Saídas"
-        mode="monthly"
-        [records]="records"
-      ></app-chart-panel>
-      <app-chart-panel
-        title="Saldo acumulado anual"
-        mode="closingBalance"
-        [records]="records"
-      ></app-chart-panel>
-    </div>
+    <app-chart-panel
+      title="Evolução mensal - Entradas vs Saídas"
+      mode="monthly"
+      [records]="records"
+    ></app-chart-panel>
+    <app-chart-panel
+      class="dashboard-page__closing-balance"
+      id="saldo-acumulado-anual"
+      title="Saldo acumulado no período"
+      mode="closingBalance"
+      [records]="records"
+    ></app-chart-panel>
   </div>
 </section>

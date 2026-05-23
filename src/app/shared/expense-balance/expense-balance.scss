@@ -1,8 +1,14 @@
 /* Card de balanceamento seguindo o padrao visual do status da projecao. */
+:host {
+  display: block;
+  height: 100%;
+}
+
 .expense-balance {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  height: 100%;
   padding: 1.2rem;
 }
 
@@ -29,6 +35,37 @@
 
 .expense-balance__status strong {
   display: block;
+}
+
+.expense-balance__detail,
+.expense-balance__alert-detail {
+  border-radius: 8px;
+  color: var(--app-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.55rem;
+  padding: 0.75rem 0.85rem;
+}
+
+.expense-balance__alert-detail {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.18);
+}
+
+.expense-balance__alert-detail .expense-balance__highlight {
+  color: #b91c1c;
+  font-weight: 800;
+}
+
+.expense-balance__detail--positive {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.18);
+}
+
+.expense-balance__detail--positive .expense-balance__highlight {
+  color: var(--app-muted);
+  font-weight: 800;
 }
 
 .expense-balance__highlight {

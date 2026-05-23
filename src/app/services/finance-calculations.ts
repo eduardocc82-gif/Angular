@@ -109,27 +109,47 @@ export class FinanceCalculations {
     thresholdPercentage = 50,
   ): ExpenseBalanceResult {
     const totals = this.calculateTotals(records);
-    const thresholdRate = this.normalizeExpenseBalanceThreshold(thresholdPercentage) / 100;
+    const normalizedThresholdPercentage =
+      this.normalizeExpenseBalanceThreshold(thresholdPercentage);
+    const thresholdRate = normalizedThresholdPercentage / 100;
+    const limitValue = totals.entradas * thresholdRate;
     const expensesByCategory = this.sumExpensesByCategory(records);
-    const highestExpense = Array.from(expensesByCategory.entries()).sort(
+    const highestExpenseCategory = Array.from(expensesByCategory.entries()).sort(
       (currentExpense, nextExpense) => nextExpense[1] - currentExpense[1],
     )[0];
+    const largestExpense = this.findLargestExpense(records);
+    const largestExpenseResult = largestExpense
+      ? {
+          category: largestExpense.category,
+          description: largestExpense.description,
+          percentageOfIncome:
+            totals.entradas > 0 ? (largestExpense.value / totals.entradas) * 100 : 100,
+          value: largestExpense.value,
+        }
+      : undefined;
 
-    if (!highestExpense || highestExpense[1] <= totals.entradas * thresholdRate) {
+    if (!highestExpenseCategory || highestExpenseCategory[1] <= limitValue) {
       return {
         status: 'positiva',
+        largestExpense: largestExpenseResult,
+        limitValue,
         message: 'Você está gastando suas despesas mensais bem balanceada.',
+        thresholdPercentage: normalizedThresholdPercentage,
       };
     }
 
-    const [category, value] = highestExpense;
+    const [category, value] = highestExpenseCategory;
     const percentageOfIncome = totals.entradas > 0 ? (value / totals.entradas) * 100 : 100;
 
     return {
       status: 'negativa',
       category,
+      categoryExpenseValue: value,
+      largestExpense: largestExpenseResult,
+      limitValue,
       percentageOfIncome,
-      message: `Suas despesas mensais estão desbalanceadas. Verifique o item ${category}, que está gastando ${Math.round(percentageOfIncome)}% do total das receitas do mês.`,
+      message: 'Suas despesas mensais estão desbalanceadas.',
+      thresholdPercentage: normalizedThresholdPercentage,
     };
   }
 
@@ -182,6 +202,13 @@ export class FinanceCalculations {
       );
 
     return totals;
+  }
+
+  /** Encontra o maior lancamento individual de despesa no periodo recebido. */
+  private findLargestExpense(records: FinancialRecord[]): FinancialRecord | undefined {
+    return records
+      .filter((record) => record.type === 'saida')
+      .sort((currentRecord, nextRecord) => nextRecord.value - currentRecord.value)[0];
   }
 
   /** Mantem compatibilidade com a faixa permitida nas configuracoes. */

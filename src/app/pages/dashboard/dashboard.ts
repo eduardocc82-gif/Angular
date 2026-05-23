@@ -20,9 +20,7 @@ import { Finance } from '../../services/finance';
 export class Dashboard implements OnInit, OnDestroy {
   // Estado da página pai que alimenta os filhos por @Input.
   records: FinancialRecord[] = [];
-  profiles: ProfileConfig[] = [];
   selectedProfile: ProfileConfig | null = null;
-  selectedProfileId: ProfileConfig['id'] = 'conservador';
   filters: RecordFilters = { month: 'todos', category: 'todas', type: 'todos' };
   expenseBalanceThresholdPercentage = 50;
 
@@ -41,8 +39,6 @@ export class Dashboard implements OnInit, OnDestroy {
       this.finance.settings$,
     ]).subscribe(([records, profiles, selectedProfileId, settings]) => {
       this.records = records;
-      this.profiles = profiles;
-      this.selectedProfileId = selectedProfileId;
       this.selectedProfile =
         profiles.find((profile) => profile.id === selectedProfileId) ?? profiles[0];
       this.expenseBalanceThresholdPercentage = settings.expenseBalanceThresholdPercentage;
@@ -111,21 +107,6 @@ export class Dashboard implements OnInit, OnDestroy {
     );
   }
 
-  // Mes usado pelo grafico de fluxo de caixa diario.
-  get cashFlowMonth(): string {
-    return this.filters.month === 'todos' ? this.finance.currentMonthKey : this.filters.month;
-  }
-
-  // Titulo do grafico com mes numerico para leitura rapida.
-  get cashFlowTitle(): string {
-    return `Fluxo de receitas e despesas, ${this.cashFlowMonthLabel}`;
-  }
-
-  // Mes numerico destacado no seletor ao lado dos cards.
-  get cashFlowMonthLabel(): string {
-    return this.formatNumericMonth(this.cashFlowMonth);
-  }
-
   // Texto do periodo selecionado no topo do dashboard.
   get analysisMonthLabel(): string {
     return this.finance.formatMonthLabel(this.filters.month);
@@ -159,20 +140,16 @@ export class Dashboard implements OnInit, OnDestroy {
     };
   }
 
-  // Seleciona o card de meta usado na projeção.
-  selectProfile(profileId: ProfileConfig['id']): void {
-    this.finance.selectProfile(profileId);
-  }
-
   // Recebe exclusão da tabela por @Output.
   deleteRecord(recordId: string): void {
     this.finance.deleteRecord(recordId);
   }
 
-  private formatNumericMonth(monthKey: string): string {
-    const [year, month] = monthKey.split('-');
-
-    return `${month}/${year}`;
+  scrollToClosingBalance(): void {
+    document.getElementById('saldo-acumulado-anual')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
   }
 
   private getLocalDateKey(date: Date): string {

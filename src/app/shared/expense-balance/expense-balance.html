@@ -9,12 +9,47 @@
     <div>
       <strong *ngIf="balance.status === 'positiva'">{{ balance.message }}</strong>
       <strong *ngIf="balance.status === 'negativa'">
-        <span>Suas despesas mensais est&atilde;o desbalanceadas. Verifique o item </span>
-        <span class="expense-balance__highlight">{{ balance.category }}</span>
-        <span>, que est&aacute; gastando </span>
-        <span class="expense-balance__highlight">{{ formattedPercentage() }}%</span>
-        <span> do total das receitas do m&ecirc;s.</span>
+        <span>{{ balance.message }}</span>
+        <span class="expense-balance__alert-detail">
+          <span>
+            <span>Maior concentra&ccedil;&atilde;o: </span>
+            <span class="expense-balance__highlight">{{ formattedCategoryExpenseValue() }}</span>
+            <span> em </span>
+            <span class="expense-balance__highlight">{{ balance.category }}</span>
+            <span>.</span>
+          </span>
+          <span>
+            <span>Essa categoria representa </span>
+            <span class="expense-balance__highlight">{{ formattedPercentage() }}%</span>
+            <span> da receita do m&ecirc;s; o limite permitido &eacute; </span>
+            <span class="expense-balance__highlight">{{ formattedThresholdPercentage() }}%</span>
+            <span> por m&ecirc;s.</span>
+          </span>
+        </span>
       </strong>
+
+      <span *ngIf="balance.status === 'positiva'" class="expense-balance__detail expense-balance__detail--positive">
+        <span *ngIf="balance.largestExpense; else noExpense">
+          <span>
+            <span>Maior despesa: </span>
+            <span class="expense-balance__highlight">{{ formattedLargestExpenseValue() }}</span>
+            <span> em </span>
+            <span class="expense-balance__highlight">{{ balance.largestExpense.category }}</span>
+            <span>.</span>
+          </span>
+          <span>
+            <span>Ela representa </span>
+            <span class="expense-balance__highlight">{{ formattedLargestExpensePercentage() }}%</span>
+            <span> da receita do m&ecirc;s; o limite de balanceamento &eacute; </span>
+            <span class="expense-balance__highlight">{{ formattedThresholdPercentage() }}%</span>
+            <span>.</span>
+          </span>
+        </span>
+      </span>
     </div>
   </div>
+
+  <ng-template #noExpense>
+    <span>Nenhuma despesa registrada no m&ecirc;s.</span>
+  </ng-template>
 </section>

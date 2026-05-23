@@ -1,13 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { combineLatest, Subscription } from 'rxjs';
 
-import {
-  ExpenseBalanceResult,
-  FinancialRecord,
-  ProfileConfig,
-  ProjectionResult,
-  SummaryTotals,
-} from '../../models/finance.models';
+import { FinancialRecord, ProfileConfig, ProjectionResult } from '../../models/finance.models';
 import { Finance } from '../../services/finance';
 
 @Component({
@@ -21,7 +15,6 @@ export class Metas implements OnInit, OnDestroy {
   records: FinancialRecord[] = [];
   profiles: ProfileConfig[] = [];
   selectedProfileId: ProfileConfig['id'] = 'conservador';
-  expenseBalanceThresholdPercentage = 50;
 
   private subscription = new Subscription();
 
@@ -33,12 +26,10 @@ export class Metas implements OnInit, OnDestroy {
       this.finance.records$,
       this.finance.profiles$,
       this.finance.selectedProfileId$,
-      this.finance.settings$,
-    ]).subscribe(([records, profiles, selectedProfileId, settings]) => {
+    ]).subscribe(([records, profiles, selectedProfileId]) => {
       this.records = records;
       this.profiles = profiles;
       this.selectedProfileId = selectedProfileId;
-      this.expenseBalanceThresholdPercentage = settings.expenseBalanceThresholdPercentage;
     });
   }
 
@@ -61,24 +52,11 @@ export class Metas implements OnInit, OnDestroy {
     return this.profiles.find((profile) => profile.id === this.selectedProfileId) ?? null;
   }
 
-  // Totais para contextualizar a meta.
-  get summary(): SummaryTotals {
-    return this.finance.calculateTotals(this.currentMonthRecords);
-  }
-
   // Resultado da projeção exibido no componente filho.
   get projection(): ProjectionResult | null {
     return this.selectedProfile
       ? this.finance.calculateProjection(this.currentMonthRecords, this.selectedProfile)
       : null;
-  }
-
-  // Balanceamento das despesas por categoria em relacao as entradas do mes atual.
-  get expenseBalance(): ExpenseBalanceResult {
-    return this.finance.calculateExpenseBalance(
-      this.currentMonthRecords,
-      this.expenseBalanceThresholdPercentage,
-    );
   }
 
   // Seleciona um perfil e persiste no Service.

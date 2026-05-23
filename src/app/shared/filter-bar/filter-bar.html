@@ -1,40 +1,63 @@
-<!-- Filtros exigidos por mês e categoria usando select-option. -->
 <div class="filter-bar finance-card">
-  <label class="filter-bar__field">
-    <span>Mês</span>
-    <select
-      class="form-select"
-      [ngModel]="filters.month"
-      (ngModelChange)="updateFilter('month', $event)"
-    >
-      <option value="todos">Todos os meses</option>
-      <option *ngFor="let month of months" [value]="month">{{ monthLabel(month) }}</option>
-    </select>
-  </label>
+  <div class="filter-bar__intro">
+    <div class="filter-bar__title-group">
+      <span class="filter-bar__title-icon">
+        <i class="bi bi-sliders2"></i>
+      </span>
+      <div>
+        <h2>Filtros da análise</h2>
+        <p>Altere o mês para atualizar o período exibido nos cards, tabela e gráficos.</p>
+      </div>
+    </div>
+  </div>
 
-  <label class="filter-bar__field">
-    <span>Categoria</span>
-    <select
-      class="form-select"
-      [ngModel]="filters.category"
-      (ngModelChange)="updateFilter('category', $event)"
-    >
-      <option value="todas">Todas as categorias</option>
-      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-    </select>
-  </label>
+  <div class="filter-bar__controls">
+    <label class="filter-bar__field filter-bar__field--month">
+      <span class="filter-bar__label">
+        <i class="bi bi-calendar3"></i>
+        Mês de análise
+      </span>
+      <select
+        class="form-select"
+        [ngModel]="filters.month"
+        (ngModelChange)="updateFilter('month', $event)"
+      >
+        <option value="todos">Todos os meses</option>
+        <option *ngFor="let month of months" [value]="month">{{ monthLabel(month) }}</option>
+      </select>
+      <small>Escolha outro mês para mudar a análise.</small>
+    </label>
 
-  <label *ngIf="showTypeFilter" class="filter-bar__field">
-    <span>Tipo</span>
-    <select
-      class="form-select"
-      [ngModel]="filters.type"
-      (ngModelChange)="updateFilter('type', $event)"
-    >
-      <option value="todos">Todos os tipos</option>
-      <option value="entrada">Entradas</option>
-      <option value="saida">Saídas</option>
-      <option value="investimento">Investimentos</option>
-    </select>
-  </label>
+    <label class="filter-bar__field">
+      <span class="filter-bar__label">
+        <i class="bi bi-tags"></i>
+        Categoria
+      </span>
+      <select
+        class="form-select"
+        [ngModel]="filters.category"
+        (ngModelChange)="updateFilter('category', $event)"
+      >
+        <option value="todas">Todas as categorias</option>
+        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+      </select>
+    </label>
+
+    <label *ngIf="showTypeFilter" class="filter-bar__field">
+      <span class="filter-bar__label">
+        <i class="bi bi-funnel"></i>
+        Tipo
+      </span>
+      <select
+        class="form-select"
+        [ngModel]="filters.type"
+        (ngModelChange)="updateFilter('type', $event)"
+      >
+        <option value="todos">Todos os tipos</option>
+        <option value="entrada">Entradas</option>
+        <option value="saida">Saídas</option>
+        <option value="investimento">Investimentos</option>
+      </select>
+    </label>
+  </div>
 </div>
