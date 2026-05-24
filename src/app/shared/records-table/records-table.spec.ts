@@ -53,16 +53,40 @@ describe('RecordsTable', () => {
       { ...records[0], date: '2026-05-01' },
     ];
 
-    expect(component.sortedRecords.map((record) => record.date)).toEqual(['2026-05-01', '2026-05-20']);
+    expect(component.sortedRecords.map((record) => record.date)).toEqual([
+      '2026-05-01',
+      '2026-05-20',
+    ]);
   });
 
   it('deve emitir o ID do registro ao clicar em excluir', () => {
     const spy = vi.spyOn(component.deleteRecord, 'emit');
-    const deleteButton = fixture.nativeElement.querySelector('button[aria-label="Excluir Salário"]') as HTMLButtonElement;
+    const deleteButton = fixture.nativeElement.querySelector(
+      'button[aria-label="Excluir Salário"]',
+    ) as HTMLButtonElement;
 
     deleteButton.click();
 
     expect(spy).toHaveBeenCalledWith('registro-1');
+  });
+
+  it('deve permitir customizar a ação exibida na tabela', () => {
+    const customFixture = TestBed.createComponent(RecordsTable);
+    customFixture.componentInstance.records = records;
+    customFixture.componentInstance.actionButtonClass = 'btn-outline-success';
+    customFixture.componentInstance.actionIcon = 'bi-box-arrow-in-down';
+    customFixture.componentInstance.actionLabel = 'Resgatar investimento';
+    customFixture.componentInstance.actionLabelPrefix = 'Resgatar';
+    customFixture.detectChanges();
+
+    const actionButton = customFixture.nativeElement.querySelector(
+      'button[aria-label="Resgatar Salário"]',
+    ) as HTMLButtonElement;
+    const actionIcon = actionButton.querySelector('i') as HTMLElement;
+
+    expect(actionButton.title).toBe('Resgatar investimento');
+    expect(actionButton.classList).toContain('btn-outline-success');
+    expect(actionIcon.classList).toContain('bi-box-arrow-in-down');
   });
 
   it('deve mostrar mensagem quando a lista estiver vazia', () => {

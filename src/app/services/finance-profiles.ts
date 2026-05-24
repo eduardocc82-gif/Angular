@@ -17,19 +17,19 @@ export class FinanceProfiles {
       id: 'leve',
       label: 'Leve',
       percentage: 90,
-      description: 'Permite gastar até 90% das entradas do mês.',
+      description: this.buildProfileDescription(90),
     },
     {
       id: 'conservador',
       label: 'Conservador',
       percentage: 50,
-      description: 'Permite gastar até 50% das entradas do mês.',
+      description: this.buildProfileDescription(50),
     },
     {
       id: 'arrojado',
       label: 'Arrojado',
       percentage: 40,
-      description: 'Permite gastar até 40% das entradas do mês.',
+      description: this.buildProfileDescription(40),
     },
   ];
 
@@ -63,11 +63,17 @@ export class FinanceProfiles {
     this.selectedProfileSubject.next(profileId);
   }
 
-  /** Atualiza o percentual configuravel mantendo nome e descricao do perfil. */
+  /** Atualiza o percentual configuravel mantendo a descricao sincronizada. */
   updateProfile(profileId: ProfileConfig['id'], percentage: number): void {
     const normalizedPercentage = Math.min(Math.max(Number(percentage), 1), 100);
     const updatedProfiles = this.profilesSubject.value.map((profile) =>
-      profile.id === profileId ? { ...profile, percentage: normalizedPercentage } : profile,
+      profile.id === profileId
+        ? {
+            ...profile,
+            percentage: normalizedPercentage,
+            description: this.buildProfileDescription(normalizedPercentage),
+          }
+        : profile,
     );
 
     localStorage.setItem(this.profilesKey, JSON.stringify(updatedProfiles));
@@ -78,7 +84,7 @@ export class FinanceProfiles {
   resetDemoData(): void {
     localStorage.removeItem(this.profilesKey);
     localStorage.setItem(this.selectedProfileKey, 'conservador');
-    this.profilesSubject.next([...this.defaultProfiles]);
+    this.profilesSubject.next(this.syncProfileDescriptions(this.defaultProfiles));
     this.selectedProfileSubject.next('conservador');
   }
 
@@ -87,13 +93,25 @@ export class FinanceProfiles {
     try {
       const storedProfiles = localStorage.getItem(this.profilesKey);
       if (!storedProfiles) {
-        return [...this.defaultProfiles];
+        return this.syncProfileDescriptions(this.defaultProfiles);
       }
 
-      return JSON.parse(storedProfiles) as ProfileConfig[];
+      return this.syncProfileDescriptions(JSON.parse(storedProfiles) as ProfileConfig[]);
     } catch {
-      return [...this.defaultProfiles];
+      return this.syncProfileDescriptions(this.defaultProfiles);
     }
+  }
+
+  /** Garante que dados antigos do localStorage exibam o percentual atual. */
+  private syncProfileDescriptions(profiles: ProfileConfig[]): ProfileConfig[] {
+    return profiles.map((profile) => ({
+      ...profile,
+      description: this.buildProfileDescription(profile.percentage),
+    }));
+  }
+
+  private buildProfileDescription(percentage: number): string {
+    return `Permite gastar até ${percentage}% das entradas do mês.`;
   }
 
   /** Resolve o perfil inicial persistido, com conservador como padrao. */

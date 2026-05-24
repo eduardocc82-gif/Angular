@@ -18,6 +18,10 @@
   position: relative;
 }
 
+.chart-panel--large .chart-panel__canvas {
+  height: 360px;
+}
+
 .chart-panel__empty {
   align-items: center;
   color: var(--app-muted);
@@ -27,4 +31,10 @@
   margin: 0;
   position: absolute;
   text-align: center;
+}
+
+@media (max-width: 760px) {
+  .chart-panel--large .chart-panel__canvas {
+    height: 320px;
+  }
 }

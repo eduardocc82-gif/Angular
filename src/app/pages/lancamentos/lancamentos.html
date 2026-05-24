@@ -2,12 +2,13 @@
 <section class="page-shell lancamentos-page">
   <div>
     <h1 class="page-title">Lançamentos</h1>
-    <p class="page-subtitle">Adicione receitas, despesas e investimentos</p>
+    <p class="page-subtitle">Adicione receitas e despesas</p>
   </div>
 
   <app-record-form
     title="Cadastrar lançamento"
     submitLabel="Salvar lançamento"
+    [allowedTypes]="allowedRecordTypes"
     (saveRecord)="saveRecord($event)"
   ></app-record-form>
 

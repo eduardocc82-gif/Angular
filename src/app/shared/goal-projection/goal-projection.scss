@@ -19,7 +19,6 @@
 }
 
 .goal-projection p,
-.goal-projection__metric-note,
 .goal-projection__metric-line span,
 .goal-projection__status span {
   color: var(--app-muted);
@@ -91,13 +90,6 @@
   line-height: 1;
 }
 
-.goal-projection__metric-text {
-  color: var(--app-muted);
-  font-size: 0.98rem;
-  font-weight: 650;
-  line-height: 1.2;
-}
-
 .goal-projection__metric-limit {
   align-items: center;
   background: #f3f4f6;
@@ -109,13 +101,6 @@
   font-weight: 800;
   line-height: 1;
   padding: 0.42rem 0.65rem;
-}
-
-.goal-projection__metric-note {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 650;
-  margin-top: 0.55rem;
 }
 
 .goal-projection__bar {

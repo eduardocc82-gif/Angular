@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 
 import { NewFinancialRecord, TransactionType } from '../../models/finance.models';
 import { Finance } from '../../services/finance';
@@ -11,6 +19,7 @@ import { Finance } from '../../services/finance';
 })
 export class RecordForm implements OnInit, OnChanges {
   // Permite reaproveitar o formulário para lançamentos comuns ou apenas investimentos.
+  @Input() allowedTypes: TransactionType[] = ['entrada', 'saida', 'investimento'];
   @Input() lockedType: TransactionType | null = null;
   @Input() title = 'Novo lançamento';
   @Input() submitLabel = 'Salvar lançamento';
@@ -23,7 +32,7 @@ export class RecordForm implements OnInit, OnChanges {
   readonly today = new Date().toISOString().slice(0, 10);
 
   // Opções fixas de tipo exibidas quando não há tipo travado.
-  readonly typeOptions: Array<{ value: TransactionType; label: string }> = [
+  private readonly allTypeOptions: Array<{ value: TransactionType; label: string }> = [
     { value: 'entrada', label: 'Entrada' },
     { value: 'saida', label: 'Saída' },
     { value: 'investimento', label: 'Investimento' },
@@ -35,12 +44,16 @@ export class RecordForm implements OnInit, OnChanges {
     type: 'saida',
     category: 'Outros',
     date: this.today,
-    value: 0,  
+    value: 0,
   };
   categories: string[] = [];
   errorMessage = '';
 
   constructor(private readonly finance: Finance) {}
+
+  get typeOptions(): Array<{ value: TransactionType; label: string }> {
+    return this.allTypeOptions.filter((option) => this.allowedTypes.includes(option.value));
+  }
 
   // Inicializa categorias no primeiro carregamento do componente.
   ngOnInit(): void {
@@ -49,15 +62,16 @@ export class RecordForm implements OnInit, OnChanges {
 
   // Reage quando a página de investimentos trava o tipo por @Input.
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['lockedType']) {
+    if (changes['lockedType'] || changes['allowedTypes']) {
       this.applyLockedType();
     }
   }
 
   // Atualiza categorias quando o usuário muda Entrada/Saída/Investimento.
   onTypeChange(type: TransactionType): void {
-    this.form.type = type;
-    this.categories = this.finance.getCategoriesForType(type);
+    const resolvedType = this.resolveAllowedType(type);
+    this.form.type = resolvedType;
+    this.categories = this.finance.getCategoriesForType(resolvedType);
     this.form.category = this.categories[0] ?? 'Outros';
   }
 
@@ -80,6 +94,11 @@ export class RecordForm implements OnInit, OnChanges {
       return;
     }
 
+    if (!this.allowedTypes.includes(this.form.type)) {
+      this.errorMessage = 'Tipo de lançamento indisponível nesta página.';
+      return;
+    }
+
     if (this.form.type !== 'investimento' && this.finance.isFutureDate(this.form.date)) {
       this.errorMessage = 'Receitas e despesas não podem ser cadastradas com data futura.';
       return;
@@ -96,7 +115,7 @@ export class RecordForm implements OnInit, OnChanges {
 
   // Limpa formulário preservando o tipo travado quando existir.
   reset(): void {
-    const type = this.lockedType ?? 'saida';
+    const type = this.lockedType ?? this.resolveAllowedType('saida');
     this.form = this.createEmptyForm(type);
     this.categories = this.finance.getCategoriesForType(type);
     this.form.category = this.categories[0] ?? 'Outros';
@@ -105,10 +124,18 @@ export class RecordForm implements OnInit, OnChanges {
 
   // Aplica tipo travado em páginas dedicadas, como Investimentos.
   private applyLockedType(): void {
-    const type = this.lockedType ?? this.form.type;
+    const type = this.lockedType ?? this.resolveAllowedType(this.form.type);
     this.form.type = type;
     this.categories = this.finance.getCategoriesForType(type);
     this.form.category = this.categories[0] ?? 'Outros';
+  }
+
+  private resolveAllowedType(type: TransactionType): TransactionType {
+    if (this.allowedTypes.includes(type)) {
+      return type;
+    }
+
+    return this.allowedTypes[0] ?? 'saida';
   }
 
   // Cria um novo estado de formulário com data atual.

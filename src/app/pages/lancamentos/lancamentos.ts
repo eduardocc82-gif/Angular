@@ -1,7 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { FinancialRecord, NewFinancialRecord, RecordFilters } from '../../models/finance.models';
+import {
+  FinancialRecord,
+  NewFinancialRecord,
+  RecordFilters,
+  TransactionType,
+} from '../../models/finance.models';
 import { Finance } from '../../services/finance';
 
 @Component({
@@ -15,6 +20,7 @@ export class Lancamentos implements OnInit, OnDestroy {
   records: FinancialRecord[] = [];
   filters: RecordFilters = { month: 'todos', category: 'todas', type: 'todos' };
   successMessage = '';
+  readonly allowedRecordTypes: TransactionType[] = ['entrada', 'saida'];
 
   private subscription = new Subscription();
 

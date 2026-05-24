@@ -65,6 +65,12 @@ describe('Finance', () => {
     expect(totals.saldo).toBe(3100);
   });
 
+  it('deve calcular saldo da carteira e total investido ate a data limite', () => {
+    expect(service.calculateWalletBalanceUntil(records, '2026-05-06')).toBe(3100);
+    expect(service.calculateInvestedUntil(records, '2026-05-06')).toBe(0);
+    expect(service.calculateInvestedUntil(records, '2026-05-07')).toBe(800);
+  });
+
   it('deve filtrar registros por mês, categoria e tipo', () => {
     const filters: RecordFilters = {
       month: '2026-05',
@@ -113,6 +119,65 @@ describe('Finance', () => {
     expect(projection.dailyMargin).toBeGreaterThanOrEqual(0);
   });
 
+  it('deve ignorar aplicacao de investimento no uso da meta', () => {
+    const profile: ProfileConfig = {
+      id: 'conservador',
+      label: 'Conservador',
+      percentage: 50,
+      description: 'Permite gastar até 50% das entradas do mês.',
+    };
+
+    const projection = service.calculateProjection(
+      [
+        {
+          id: 'entrada-meta',
+          description: 'Receita',
+          type: 'entrada',
+          category: 'Salário',
+          date: '2026-05-01',
+          value: 1000,
+        },
+        {
+          id: 'saida-investimento-meta',
+          description: 'Saída Investimento',
+          type: 'saida',
+          category: 'Aplicação Investimento',
+          date: '2026-05-02',
+          value: 900,
+        },
+        {
+          id: 'saida-meta',
+          description: 'Mercado',
+          type: 'saida',
+          category: 'Alimentação',
+          date: '2026-05-03',
+          value: 200,
+        },
+      ],
+      profile,
+    );
+
+    expect(projection.limit).toBe(500);
+    expect(projection.spent).toBe(200);
+    expect(projection.spentPercentageOfIncome).toBe(20);
+    expect(projection.usagePercent).toBe(40);
+    expect(projection.status).toBe('positiva');
+  });
+
+  it('deve atualizar a descricao do perfil junto com o percentual da meta', () => {
+    service.updateProfile('conservador', 65);
+
+    const profile = service.profilesSnapshot.find(
+      (profileConfig) => profileConfig.id === 'conservador',
+    );
+
+    expect(profile?.percentage).toBe(65);
+    expect(profile?.description).toBe('Permite gastar até 65% das entradas do mês.');
+    expect(localStorage.getItem('controle-financeiro-angular.profiles.v1')).toContain(
+      'Permite gastar até 65% das entradas do mês.',
+    );
+  });
+
   it('deve indicar despesas balanceadas quando nenhuma categoria passa de 50% das receitas', () => {
     const balance = service.calculateExpenseBalance(records);
 
@@ -122,6 +187,40 @@ describe('Finance', () => {
     expect(balance.largestExpense?.percentageOfIncome).toBe(30);
     expect(balance.limitValue).toBe(2500);
     expect(balance.thresholdPercentage).toBe(50);
+  });
+
+  it('deve ignorar aplicacao de investimento no balanceamento de despesas', () => {
+    const balance = service.calculateExpenseBalance([
+      {
+        id: 'entrada-balanceamento',
+        description: 'Receita',
+        type: 'entrada',
+        category: 'Salário',
+        date: '2026-05-01',
+        value: 1000,
+      },
+      {
+        id: 'saida-investimento-balanceamento',
+        description: 'Saída Investimento',
+        type: 'saida',
+        category: 'Aplicação Investimento',
+        date: '2026-05-02',
+        value: 900,
+      },
+      {
+        id: 'saida-balanceamento',
+        description: 'Aluguel',
+        type: 'saida',
+        category: 'Moradia',
+        date: '2026-05-03',
+        value: 300,
+      },
+    ]);
+
+    expect(balance.status).toBe('positiva');
+    expect(balance.largestExpense?.description).toBe('Aluguel');
+    expect(balance.largestExpense?.percentageOfIncome).toBe(30);
+    expect(balance.limitValue).toBe(500);
   });
 
   it('deve indicar despesa desbalanceada quando uma categoria passa de 50% das receitas', () => {
@@ -193,6 +292,66 @@ describe('Finance', () => {
     expect(localStorage.getItem('controle-financeiro-angular.records.v2')).toContain(
       'Conta de luz',
     );
+  });
+
+  it('deve registrar investimento e saida automatica da carteira', () => {
+    const initialCount = service.recordsSnapshot.length;
+
+    service.registerInvestment({
+      description: 'Aporte corretora',
+      type: 'investimento',
+      category: 'CDB',
+      date: '2026-05-20',
+      value: 1200,
+    });
+
+    expect(service.recordsSnapshot).toHaveLength(initialCount + 2);
+    expect(
+      service.recordsSnapshot.some(
+        (record) =>
+          record.description === 'Aporte corretora' &&
+          record.type === 'investimento' &&
+          record.category === 'CDB',
+      ),
+    ).toBe(true);
+    expect(
+      service.recordsSnapshot.some(
+        (record) =>
+          record.description === 'Saída Investimento' &&
+          record.type === 'saida' &&
+          record.category === 'Aplicação Investimento' &&
+          record.date === '2026-05-20' &&
+          record.value === 1200,
+      ),
+    ).toBe(true);
+  });
+
+  it('deve registrar entrada automatica ao resgatar investimento', () => {
+    service.registerInvestment({
+      description: 'Aporte resgatavel',
+      type: 'investimento',
+      category: 'Fundos',
+      date: '2026-05-18',
+      value: 900,
+    });
+
+    const investment = service.recordsSnapshot.find(
+      (record) => record.description === 'Aporte resgatavel',
+    );
+
+    expect(investment).toBeTruthy();
+    expect(service.redeemInvestment(investment?.id ?? '', '2026-05-24')).toBe(true);
+    expect(service.recordsSnapshot.some((record) => record.id === investment?.id)).toBe(false);
+    expect(
+      service.recordsSnapshot.some(
+        (record) =>
+          record.description === 'Entrada Investimento' &&
+          record.type === 'entrada' &&
+          record.category === 'Resgate investimento' &&
+          record.date === '2026-05-24' &&
+          record.value === 900,
+      ),
+    ).toBe(true);
   });
 
   it('deve remover registro persistido', () => {

@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'lancamentos', component: Lancamentos },
   { path: 'metas', component: Metas },
   { path: 'investimentos', component: Investimentos },
+  { path: 'carteira', redirectTo: 'investimentos', pathMatch: 'full' },
   { path: 'relatorios', component: Relatorios },
   { path: 'configuracoes', component: Configuracoes },
   { path: 'configuacoes', redirectTo: 'configuracoes', pathMatch: 'full' },

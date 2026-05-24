@@ -1,11 +1,13 @@
 <!-- Painel de gráfico renderizado por Chart.js. -->
-<section class="finance-card chart-panel">
+<section class="finance-card chart-panel" [class.chart-panel--large]="size === 'large'">
   <div class="section-heading chart-panel__heading">
     <h2>{{ title }}</h2>
   </div>
 
   <div class="chart-panel__canvas">
     <canvas #chartCanvas></canvas>
-    <p *ngIf="!hasData" class="chart-panel__empty">Sem dados suficientes para montar este gráfico.</p>
+    <p *ngIf="!hasData" class="chart-panel__empty">
+      Sem dados suficientes para montar este gráfico.
+    </p>
   </div>
 </section>

@@ -32,6 +32,17 @@ describe('RecordForm', () => {
     expect(component.form.category).toBe('Salário');
   });
 
+  it('deve restringir tipos disponíveis quando a página informa tipos permitidos', () => {
+    const restrictedFixture = TestBed.createComponent(RecordForm);
+    restrictedFixture.componentInstance.allowedTypes = ['entrada', 'saida'];
+    restrictedFixture.detectChanges();
+
+    expect(restrictedFixture.componentInstance.typeOptions.map((option) => option.value)).toEqual([
+      'entrada',
+      'saida',
+    ]);
+  });
+
   it('deve emitir um lançamento válido por @Output', () => {
     const emittedRecords: NewFinancialRecord[] = [];
     component.saveRecord.subscribe((record) => emittedRecords.push(record));

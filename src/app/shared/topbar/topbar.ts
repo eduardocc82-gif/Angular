@@ -12,7 +12,7 @@ export class Topbar {
     { label: 'Dashboard', route: '/dashboard', icon: 'bi-speedometer2' },
     { label: 'Lançamentos', route: '/lancamentos', icon: 'bi-plus-circle' },
     { label: 'Metas', route: '/metas', icon: 'bi-bullseye' },
-    { label: 'Investimentos', route: '/investimentos', icon: 'bi-graph-up-arrow' },
+    { label: 'Carteira e Investimentos', route: '/investimentos', icon: 'bi-wallet2' },
     { label: 'Relatórios', route: '/relatorios', icon: 'bi-file-earmark-pdf' },
     { label: 'Configurações', route: '/configuracoes', icon: 'bi-sliders' },
   ];

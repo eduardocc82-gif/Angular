@@ -2,6 +2,7 @@
 <article
   class="summary-card"
   [class.summary-card--interactive]="interactive"
+  [class.summary-card--large]="size === 'large'"
   [attr.role]="interactive ? 'button' : null"
   [attr.tabindex]="interactive ? '0' : null"
   [ngClass]="'summary-card--' + tone"

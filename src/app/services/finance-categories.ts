@@ -8,8 +8,17 @@ import { CategoryMap, TransactionType } from '../models/finance.models';
 export class FinanceCategories {
   // Categorias padrao por tipo; "Outros" fica no final como solicitado.
   readonly categories: CategoryMap = {
-    entrada: ['Salário', 'Freelance', 'Reembolso', 'Rendimentos', 'Outros'],
-    saida: ['Moradia', 'Alimentação', 'Transporte', 'Saúde', 'Educação', 'Lazer', 'Outros'],
+    entrada: ['Salário', 'Freelance', 'Reembolso', 'Rendimentos', 'Resgate investimento', 'Outros'],
+    saida: [
+      'Moradia',
+      'Alimentação',
+      'Transporte',
+      'Saúde',
+      'Educação',
+      'Lazer',
+      'Aplicação Investimento',
+      'Outros',
+    ],
     investimento: ['Tesouro Direto', 'CDB', 'Fundos', 'Ações', 'Criptomoedas', 'Outros'],
   };
 

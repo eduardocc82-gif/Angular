@@ -35,9 +35,9 @@
       tone="blue"
     ></app-summary-card>
     <app-summary-card
-      title="Investimentos"
-      [value]="summary.investimentos"
-      helper="Aportes registrados"
+      title="Total investido"
+      [value]="totalInvestedUntilToday"
+      helper="Aportes acumulados até hoje"
       icon="bi-graph-up-arrow"
       tone="yellow"
     ></app-summary-card>
@@ -48,12 +48,15 @@
       icon="bi-cash-coin"
       [interactive]="true"
       [tone]="walletBalanceTone"
-      (cardClick)="scrollToClosingBalance()"
+      (cardClick)="openWallet()"
     ></app-summary-card>
   </div>
 
   <div class="dashboard-page__status-grid">
-    <app-goal-projection [profile]="selectedProfile" [projection]="projection"></app-goal-projection>
+    <app-goal-projection
+      [profile]="selectedProfile"
+      [projection]="projection"
+    ></app-goal-projection>
     <app-expense-balance [balance]="expenseBalance"></app-expense-balance>
   </div>
 
@@ -79,13 +82,6 @@
     <app-chart-panel
       title="Evolução mensal - Entradas vs Saídas"
       mode="monthly"
-      [records]="records"
-    ></app-chart-panel>
-    <app-chart-panel
-      class="dashboard-page__closing-balance"
-      id="saldo-acumulado-anual"
-      title="Saldo acumulado no período"
-      mode="closingBalance"
       [records]="records"
     ></app-chart-panel>
   </div>

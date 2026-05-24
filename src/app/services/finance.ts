@@ -67,6 +67,40 @@ export class Finance {
     this.records.addRecord(record);
   }
 
+  /** Registra um aporte e a saida correspondente da carteira. */
+  registerInvestment(record: NewFinancialRecord): void {
+    this.records.addRecord({ ...record, type: 'investimento' });
+    this.records.addRecord({
+      category: 'Aplicação Investimento',
+      date: record.date,
+      description: 'Saída Investimento',
+      type: 'saida',
+      value: record.value,
+    });
+  }
+
+  /** Registra uma entrada de resgate e remove o aporte selecionado. */
+  redeemInvestment(recordId: string, redemptionDate = this.getLocalDateKey()): boolean {
+    const investment = this.records.recordsSnapshot.find(
+      (record) => record.id === recordId && record.type === 'investimento',
+    );
+
+    if (!investment) {
+      return false;
+    }
+
+    this.records.addRecord({
+      category: 'Resgate investimento',
+      date: redemptionDate,
+      description: 'Entrada Investimento',
+      type: 'entrada',
+      value: investment.value,
+    });
+    this.records.deleteRecord(investment.id);
+
+    return true;
+  }
+
   /** Remove um lancamento e propaga a mudanca para todos os componentes. */
   deleteRecord(recordId: string): void {
     this.records.deleteRecord(recordId);
@@ -114,6 +148,16 @@ export class Finance {
     return this.calculations.calculateTotals(records);
   }
 
+  /** Calcula o saldo acumulado da carteira ate hoje ou uma data informada. */
+  calculateWalletBalanceUntil(records: FinancialRecord[], limitDateKey?: string): number {
+    return this.calculations.calculateWalletBalanceUntil(records, limitDateKey);
+  }
+
+  /** Soma aportes de investimento ate hoje ou uma data informada. */
+  calculateInvestedUntil(records: FinancialRecord[], limitDateKey?: string): number {
+    return this.calculations.calculateInvestedUntil(records, limitDateKey);
+  }
+
   /** Calcula limite, status e margem diaria restante ate o fim do mes. */
   calculateProjection(records: FinancialRecord[], profile: ProfileConfig): ProjectionResult {
     return this.calculations.calculateProjection(records, profile);
@@ -145,5 +189,12 @@ export class Finance {
   /** Valida a regra: receitas e despesas nao podem ter data futura. */
   isFutureDate(dateValue: string): boolean {
     return this.calculations.isFutureDate(dateValue);
+  }
+
+  private getLocalDateKey(date = new Date()): string {
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${date.getFullYear()}-${month}-${day}`;
   }
 }

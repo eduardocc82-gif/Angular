@@ -13,8 +13,12 @@ export class RecordsTable {
   @Input() records: FinancialRecord[] = [];
   @Input() title = 'Lançamentos';
   @Input() compact = false;
+  @Input() actionButtonClass = 'btn-outline-danger';
+  @Input() actionIcon = 'bi-trash3';
+  @Input() actionLabel = 'Excluir lançamento';
+  @Input() actionLabelPrefix = 'Excluir';
 
-  // Exclusão enviada ao pai por @Output, conforme requisito.
+  // Acao enviada ao pai por @Output. O nome antigo preserva compatibilidade.
   @Output() deleteRecord = new EventEmitter<string>();
 
   // Garante exibicao cronologica mesmo quando o pai envia registros fora de ordem.

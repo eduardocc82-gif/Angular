@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 
 import {
@@ -26,7 +27,10 @@ export class Dashboard implements OnInit, OnDestroy {
 
   private subscription = new Subscription();
 
-  constructor(private readonly finance: Finance) {}
+  constructor(
+    private readonly finance: Finance,
+    private readonly router: Router,
+  ) {}
 
   // Assina registros e configurações persistidas no localStorage.
   ngOnInit(): void {
@@ -71,25 +75,17 @@ export class Dashboard implements OnInit, OnDestroy {
 
   // Saldo consolidado de entradas menos despesas registradas ate hoje.
   get walletBalanceToday(): number {
-    const todayKey = this.getLocalDateKey(new Date());
-
-    return this.records
-      .filter(
-        (record) =>
-          record.date <= todayKey && (record.type === 'entrada' || record.type === 'saida'),
-      )
-      .reduce((balance, record) => {
-        if (record.type === 'entrada') {
-          return balance + record.value;
-        }
-
-        return balance - record.value;
-      }, 0);
+    return this.finance.calculateWalletBalanceUntil(this.records);
   }
 
   // Ajusta a cor do card conforme saldo positivo ou negativo.
   get walletBalanceTone(): 'green' | 'red' | 'blue' | 'yellow' {
     return this.walletBalanceToday >= 0 ? 'green' : 'red';
+  }
+
+  // Aportes acumulados ate hoje para leitura geral da carteira.
+  get totalInvestedUntilToday(): number {
+    return this.finance.calculateInvestedUntil(this.records);
   }
 
   // Projeção atual conforme perfil selecionado.
@@ -145,17 +141,7 @@ export class Dashboard implements OnInit, OnDestroy {
     this.finance.deleteRecord(recordId);
   }
 
-  scrollToClosingBalance(): void {
-    document.getElementById('saldo-acumulado-anual')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
-  }
-
-  private getLocalDateKey(date: Date): string {
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    return `${date.getFullYear()}-${month}-${day}`;
+  openWallet(): void {
+    void this.router.navigate(['/investimentos']);
   }
 }

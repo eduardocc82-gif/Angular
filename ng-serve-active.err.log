@@ -1,0 +1,194 @@
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'buildInvestmentTotalChart' does not exist on type 'ChartPanel'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/chart-panel/chart-panel.ts:93:18:
+[37m      93 │       return this.[32mbuildInvestmentTotalChart[37m();
+         ╵                   [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'buildMonthlyInvestmentTotal' does not exist on type 'ChartPanel'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/chart-panel/chart-panel.ts:315:33:
+[37m      315 │     const investmentTotal = this.[32mbuildMonthlyInvestmentTotal[37m();
+          ╵                                  [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'month' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/chart-panel/chart-panel.ts:316:52:
+[37m      316 │     const pointColors = investmentTotal.months.map(([32mmonth[37m) =>
+          ╵                                                     [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'month' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/chart-panel/chart-panel.ts:334:53:
+[37m      334 │             pointRadius: investmentTotal.months.map(([32mmonth[37m) =>
+          ╵                                                      [32m~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'scrollToClosingBalance' does not exist on type 'Dashboard'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/dashboard/dashboard.html:51:19:
+[37m      51 │       (cardClick)="[32mscrollToClosingBalance[37m()"
+         ╵                    [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Dashboard.
+
+    src/app/pages/dashboard/dashboard.ts:18:15:
+[37m      18 │   templateUrl: [32m'./dashboard.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG8001: 'app-summary-card' is not a known element:
+1. If 'app-summary-card' is an Angular component, then verify that it is part of this module.
+2. If 'app-summary-card' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/carteira/carteira.html:20:4:
+[37m      20 │     [32m<app-summary-card[37m
+         ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Carteira.
+
+    src/app/pages/carteira/carteira.ts:10:15:
+[37m      10 │   templateUrl: [32m'./carteira.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG8002: Can't bind to 'value' since it isn't a known property of 'app-summary-card'.
+1. If 'app-summary-card' is an Angular component and it has 'value' input, then verify that it is part of this module.
+2. If 'app-summary-card' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
+3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/carteira/carteira.html:22:6:
+[37m      22 │       [32m[value]="walletBalanceToday"[37m
+         ╵       [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Carteira.
+
+    src/app/pages/carteira/carteira.ts:10:15:
+[37m      10 │   templateUrl: [32m'./carteira.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG8002: Can't bind to 'tone' since it isn't a known property of 'app-summary-card'.
+1. If 'app-summary-card' is an Angular component and it has 'tone' input, then verify that it is part of this module.
+2. If 'app-summary-card' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
+3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/carteira/carteira.html:26:6:
+[37m      26 │       [32m[tone]="walletBalanceTone"[37m
+         ╵       [32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Carteira.
+
+    src/app/pages/carteira/carteira.ts:10:15:
+[37m      10 │   templateUrl: [32m'./carteira.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG8001: 'app-summary-card' is not a known element:
+1. If 'app-summary-card' is an Angular component, then verify that it is part of this module.
+2. If 'app-summary-card' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/carteira/carteira.html:28:4:
+[37m      28 │     [32m<app-summary-card[37m
+         ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Carteira.
+
+    src/app/pages/carteira/carteira.ts:10:15:
+[37m      10 │   templateUrl: [32m'./carteira.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG8002: Can't bind to 'value' since it isn't a known property of 'app-summary-card'.
+1. If 'app-summary-card' is an Angular component and it has 'value' input, then verify that it is part of this module.
+2. If 'app-summary-card' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
+3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/carteira/carteira.html:30:6:
+[37m      30 │       [32m[value]="totalInvestedUntilToday"[37m
+         ╵       [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Carteira.
+
+    src/app/pages/carteira/carteira.ts:10:15:
+[37m      10 │   templateUrl: [32m'./carteira.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG8001: 'app-chart-panel' is not a known element:
+1. If 'app-chart-panel' is an Angular component, then verify that it is part of this module.
+2. If 'app-chart-panel' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/carteira/carteira.html:39:4:
+[37m      39 │     [32m<app-chart-panel[37m
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Carteira.
+
+    src/app/pages/carteira/carteira.ts:10:15:
+[37m      10 │   templateUrl: [32m'./carteira.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG8002: Can't bind to 'records' since it isn't a known property of 'app-chart-panel'.
+1. If 'app-chart-panel' is an Angular component and it has 'records' input, then verify that it is part of this module.
+2. If 'app-chart-panel' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
+3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/carteira/carteira.html:43:6:
+[37m      43 │       [32m[records]="records"[37m
+         ╵       [32m~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Carteira.
+
+    src/app/pages/carteira/carteira.ts:10:15:
+[37m      10 │   templateUrl: [32m'./carteira.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG8001: 'app-chart-panel' is not a known element:
+1. If 'app-chart-panel' is an Angular component, then verify that it is part of this module.
+2. If 'app-chart-panel' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/carteira/carteira.html:45:4:
+[37m      45 │     [32m<app-chart-panel[37m
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Carteira.
+
+    src/app/pages/carteira/carteira.ts:10:15:
+[37m      10 │   templateUrl: [32m'./carteira.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG8002: Can't bind to 'records' since it isn't a known property of 'app-chart-panel'.
+1. If 'app-chart-panel' is an Angular component and it has 'records' input, then verify that it is part of this module.
+2. If 'app-chart-panel' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
+3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/carteira/carteira.html:49:6:
+[37m      49 │       [32m[records]="records"[37m
+         ╵       [32m~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Carteira.
+
+    src/app/pages/carteira/carteira.ts:10:15:
+[37m      10 │   templateUrl: [32m'./carteira.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'deleteRecord' does not exist on type 'Investimentos'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/investimentos/investimentos.html:38:20:
+[37m      38 │     (deleteRecord)="[32mdeleteRecord[37m($event)"
+         ╵                     [32m~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Investimentos.
+
+    src/app/pages/investimentos/investimentos.ts:10:15:
+[37m      10 │   templateUrl: [32m'./investimentos.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m

@@ -11,7 +11,7 @@ import { Finance } from '../../services/finance';
   styleUrl: './investimentos.scss',
 })
 export class Investimentos implements OnInit, OnDestroy {
-  // Rota dedicada apenas a aportes de investimentos.
+  // Rota dedicada a aportes, resgates e visao acumulada da carteira.
   records: FinancialRecord[] = [];
   filters: RecordFilters = { month: 'todos', category: 'todas', type: 'investimento' };
   message = '';
@@ -47,6 +47,16 @@ export class Investimentos implements OnInit, OnDestroy {
     return this.filteredRecords.reduce((total, record) => total + record.value, 0);
   }
 
+  // Saldo consolidado de entradas menos despesas registradas ate hoje.
+  get walletBalanceToday(): number {
+    return this.finance.calculateWalletBalanceUntil(this.records);
+  }
+
+  // Ajusta a cor do card conforme saldo positivo ou negativo.
+  get walletBalanceTone(): 'green' | 'red' | 'blue' | 'yellow' {
+    return this.walletBalanceToday >= 0 ? 'green' : 'red';
+  }
+
   // Meses disponíveis para filtro.
   get months(): string[] {
     return this.finance.listAvailableMonths(this.investmentRecords);
@@ -59,8 +69,8 @@ export class Investimentos implements OnInit, OnDestroy {
 
   // Salva aporte emitido pelo formulário filho.
   saveInvestment(record: NewFinancialRecord): void {
-    this.finance.addRecord({ ...record, type: 'investimento' });
-    this.message = 'Investimento registrado com sucesso.';
+    this.finance.registerInvestment(record);
+    this.message = 'Investimento registrado e saída da carteira lançada.';
   }
 
   // Atualiza filtros mantendo o tipo fixo como investimento.
@@ -68,9 +78,11 @@ export class Investimentos implements OnInit, OnDestroy {
     this.filters = { ...filters, type: 'investimento' };
   }
 
-  // Remove aporte selecionado na tabela.
-  deleteRecord(recordId: string): void {
-    this.finance.deleteRecord(recordId);
-    this.message = 'Investimento removido.';
+  // Registra entrada de resgate e remove o aporte da lista de investimentos.
+  redeemInvestment(recordId: string): void {
+    const redeemed = this.finance.redeemInvestment(recordId);
+    this.message = redeemed
+      ? 'Resgate lançado como entrada e investimento removido.'
+      : 'Investimento não encontrado para resgate.';
   }
 }

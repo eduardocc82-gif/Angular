@@ -91,11 +91,6 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.dashboard-page__closing-balance {
-  grid-column: 1 / -1;
-  scroll-margin-top: 1rem;
-}
-
 @media (max-width: 920px) {
   .dashboard-page__cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));

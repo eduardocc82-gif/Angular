@@ -13,6 +13,8 @@ import {
   providedIn: 'root',
 })
 export class FinanceCalculations {
+  private readonly investmentApplicationCategory = 'Aplicação Investimento';
+
   /** Filtra por mes, categoria e tipo e devolve os lancamentos em data crescente. */
   filterRecords(records: FinancialRecord[], filters: RecordFilters): FinancialRecord[] {
     return records
@@ -58,11 +60,40 @@ export class FinanceCalculations {
     );
   }
 
+  /** Calcula o saldo acumulado da carteira ate uma data limite. */
+  calculateWalletBalanceUntil(
+    records: FinancialRecord[],
+    limitDateKey = this.getLocalDateKey(),
+  ): number {
+    return records
+      .filter(
+        (record) =>
+          record.date <= limitDateKey && (record.type === 'entrada' || record.type === 'saida'),
+      )
+      .reduce((balance, record) => {
+        if (record.type === 'entrada') {
+          return balance + record.value;
+        }
+
+        return balance - record.value;
+      }, 0);
+  }
+
+  /** Soma todos os aportes de investimento ate uma data limite. */
+  calculateInvestedUntil(
+    records: FinancialRecord[],
+    limitDateKey = this.getLocalDateKey(),
+  ): number {
+    return records
+      .filter((record) => record.type === 'investimento' && record.date <= limitDateKey)
+      .reduce((total, record) => total + record.value, 0);
+  }
+
   /** Calcula limite, status e margem diaria restante ate o fim do mes. */
   calculateProjection(records: FinancialRecord[], profile: ProfileConfig): ProjectionResult {
     const totals = this.calculateTotals(records);
     const limit = totals.entradas * (profile.percentage / 100);
-    const spent = totals.saidas;
+    const spent = this.sumGoalExpenses(records);
     const spentPercentageOfIncome = totals.entradas > 0 ? (spent / totals.entradas) * 100 : 0;
     const usagePercent = limit > 0 ? (spent / limit) * 100 : 0;
     const daysRemaining = this.getRemainingDaysInMonth();
@@ -191,12 +222,20 @@ export class FinanceCalculations {
     return dateValue.slice(0, 7);
   }
 
+  /** Formata hoje como YYYY-MM-DD no fuso local. */
+  private getLocalDateKey(date = new Date()): string {
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${date.getFullYear()}-${month}-${day}`;
+  }
+
   /** Agrupa apenas despesas por categoria para regras de concentracao de gastos. */
   private sumExpensesByCategory(records: FinancialRecord[]): Map<string, number> {
     const totals = new Map<string, number>();
 
     records
-      .filter((record) => record.type === 'saida')
+      .filter((record) => this.isGoalExpense(record))
       .forEach((record) =>
         totals.set(record.category, (totals.get(record.category) ?? 0) + record.value),
       );
@@ -207,8 +246,24 @@ export class FinanceCalculations {
   /** Encontra o maior lancamento individual de despesa no periodo recebido. */
   private findLargestExpense(records: FinancialRecord[]): FinancialRecord | undefined {
     return records
-      .filter((record) => record.type === 'saida')
+      .filter((record) => this.isGoalExpense(record))
       .sort((currentRecord, nextRecord) => nextRecord.value - currentRecord.value)[0];
+  }
+
+  /** Soma despesas consideradas na meta, excluindo aplicacoes de investimento. */
+  private sumGoalExpenses(records: FinancialRecord[]): number {
+    return records
+      .filter((record) => this.isGoalExpense(record))
+      .reduce((total, record) => total + record.value, 0);
+  }
+
+  /** Identifica despesas que entram em meta e balanceamento. */
+  private isGoalExpense(record: FinancialRecord): boolean {
+    return (
+      record.type === 'saida' &&
+      record.category.trim().toLocaleLowerCase('pt-BR') !==
+        this.investmentApplicationCategory.toLocaleLowerCase('pt-BR')
+    );
   }
 
   /** Mantem compatibilidade com a faixa permitida nas configuracoes. */

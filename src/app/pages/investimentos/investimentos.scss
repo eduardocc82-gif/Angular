@@ -1,4 +1,4 @@
-/* Módulo de investimentos separado do fluxo de despesas. */
+/* Módulo de carteira e investimentos com leitura operacional. */
 .investimentos-page {
   display: flex;
   flex-direction: column;
@@ -9,11 +9,30 @@
   align-items: stretch;
   display: grid;
   gap: 1rem;
-  grid-template-columns: minmax(0, 1fr) minmax(230px, 320px);
+  grid-template-columns: minmax(0, 1fr) minmax(460px, 620px);
+}
+
+.investimentos-page__summary {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.investimentos-page__summary app-summary-card,
+.investimentos-page__charts app-chart-panel {
+  display: block;
+  min-width: 0;
+}
+
+.investimentos-page__charts {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
 }
 
 @media (max-width: 760px) {
-  .investimentos-page__hero {
+  .investimentos-page__hero,
+  .investimentos-page__summary {
     grid-template-columns: 1fr;
   }
 }

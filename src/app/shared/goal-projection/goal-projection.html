@@ -15,7 +15,6 @@
       </span>
       <div class="goal-projection__metric-line">
         <strong class="goal-projection__metric-value">{{ projection.spentPercentageOfIncome | number: '1.0-0' }}%</strong>
-        <span class="goal-projection__metric-text">usado das entradas</span>
         <span class="goal-projection__metric-limit">limite {{ profile.percentage }}%</span>
       </div>
     </div>
@@ -23,13 +22,12 @@
     <div class="goal-projection__metric">
       <span class="goal-projection__metric-label goal-projection__metric-label--spent">
         <i class="bi bi-cash-coin"></i>
-        Gastos atuais
+        Gastos no período
       </span>
       <div class="goal-projection__metric-line">
         <strong class="goal-projection__metric-value">
           {{ projection.spent | currency: 'BRL' : 'symbol' : '1.2-2' }}
         </strong>
-        <span class="goal-projection__metric-text">gastos no mês</span>
         <span class="goal-projection__metric-limit">
           limite {{ projection.limit | currency: 'BRL' : 'symbol' : '1.2-2' }}
         </span>

@@ -13,6 +13,7 @@ export class SummaryCard {
   @Input() helper = '';
   @Input() icon = 'bi-wallet2';
   @Input() interactive = false;
+  @Input() size: 'normal' | 'large' = 'normal';
   @Input() tone: 'green' | 'red' | 'blue' | 'yellow' = 'blue';
   @Output() cardClick = new EventEmitter<void>();
 

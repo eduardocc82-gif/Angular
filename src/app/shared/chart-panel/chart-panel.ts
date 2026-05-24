@@ -15,7 +15,7 @@ import { FinancialRecord } from '../../models/finance.models';
 // Registro único dos elementos Chart.js usados no dashboard.
 Chart.register(...registerables);
 
-type ChartPanelMode = 'category' | 'monthly' | 'cashflow' | 'closingBalance';
+type ChartPanelMode = 'category' | 'monthly' | 'cashflow' | 'closingBalance' | 'investmentTotal';
 
 @Component({
   selector: 'app-chart-panel',
@@ -24,10 +24,16 @@ type ChartPanelMode = 'category' | 'monthly' | 'cashflow' | 'closingBalance';
   styleUrl: './chart-panel.scss',
 })
 export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
+  private readonly investmentTransferCategories = [
+    'Aplicação Investimento',
+    'Resgate investimento',
+  ];
+
   // O pai informa os dados e o tipo de visualização por @Input.
   @Input() records: FinancialRecord[] = [];
   @Input() mode: ChartPanelMode = 'category';
   @Input() monthKey = '';
+  @Input() size: 'normal' | 'large' = 'normal';
   @Input() title = 'Gráfico financeiro';
 
   // Canvas usado diretamente pela integração com Chart.js.
@@ -88,6 +94,10 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
       return this.buildClosingBalanceChart();
     }
 
+    if (this.mode === 'investmentTotal') {
+      return this.buildInvestmentTotalChart();
+    }
+
     return this.buildCategoryChart();
   }
 
@@ -104,9 +114,11 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     if (this.mode === 'closingBalance') {
-      return this.records.some(
-        (record) => record.type === 'entrada' || record.type === 'saida',
-      );
+      return this.records.some((record) => record.type === 'entrada' || record.type === 'saida');
+    }
+
+    if (this.mode === 'investmentTotal') {
+      return this.records.some((record) => record.type === 'investimento');
     }
 
     return config.data.datasets.some((dataset) =>
@@ -116,7 +128,9 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
 
   // Gráfico de despesas por categoria para atender ao requisito de Chart.js.
   private buildCategoryChart(): ChartConfiguration {
-    const expenseRecords = this.records.filter((record) => record.type === 'saida');
+    const expenseRecords = this.records.filter(
+      (record) => record.type === 'saida' && !this.isInvestmentTransferRecord(record),
+    );
     const grouped = this.sumByCategory(expenseRecords);
 
     return {
@@ -301,6 +315,71 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
     };
   }
 
+  // Grafico do total investido acumulado em todo o periodo registrado.
+  private buildInvestmentTotalChart(): ChartConfiguration {
+    const investmentTotal = this.buildMonthlyInvestmentTotal();
+    const pointColors = investmentTotal.months.map((month) =>
+      this.isCurrentMonth(month) ? '#f59e0b' : '#10b981',
+    );
+
+    return {
+      type: 'line',
+      data: {
+        labels: investmentTotal.labels,
+        datasets: [
+          {
+            label: 'Total investido',
+            data: investmentTotal.values,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            fill: true,
+            pointBackgroundColor: pointColors,
+            pointBorderColor: pointColors,
+            pointHoverRadius: 7,
+            pointRadius: investmentTotal.months.map((month) =>
+              this.isCurrentMonth(month) ? 6 : 4,
+            ),
+            tension: 0.28,
+          },
+        ],
+      },
+      options: {
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (item) => `Investido acumulado: ${this.formatCurrency(Number(item.raw))}`,
+            },
+          },
+        },
+        responsive: true,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Meses',
+            },
+          },
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Total investido',
+            },
+            ticks: {
+              callback: (value) => this.formatCurrency(Number(value)),
+            },
+          },
+        },
+      },
+    };
+  }
+
   // Gráfico de evolução mensal com entradas e saídas.
   private buildMonthlyChart(): ChartConfiguration {
     const grouped = this.sumByMonth(this.records);
@@ -356,9 +435,7 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
     const totals = new Map<string, { entrada: number; saida: number }>();
 
     this.records
-      .filter(
-        (record) => record.type === 'entrada' || record.type === 'saida',
-      )
+      .filter((record) => record.type === 'entrada' || record.type === 'saida')
       .forEach((record) => {
         const month = record.date.slice(0, 7);
         const current = totals.get(month) ?? { entrada: 0, saida: 0 };
@@ -389,6 +466,39 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
         accumulatedBalance += total.entrada - total.saida;
 
         return Number(accumulatedBalance.toFixed(2));
+      }),
+    };
+  }
+
+  // Calcula o total investido acumulado mes a mes no periodo completo da base.
+  private buildMonthlyInvestmentTotal(): {
+    labels: string[];
+    months: string[];
+    values: number[];
+  } {
+    const totals = new Map<string, number>();
+
+    this.records
+      .filter((record) => record.type === 'investimento')
+      .forEach((record) => {
+        const month = record.date.slice(0, 7);
+        totals.set(month, (totals.get(month) ?? 0) + record.value);
+      });
+
+    const recordedMonths = this.records.map((record) => record.date.slice(0, 7)).sort();
+    const months =
+      recordedMonths.length > 0
+        ? this.listMonthsBetween(recordedMonths[0], recordedMonths[recordedMonths.length - 1])
+        : [];
+    let accumulatedInvestment = 0;
+
+    return {
+      labels: months.map((month) => this.formatMonthWithYear(month)),
+      months,
+      values: months.map((month) => {
+        accumulatedInvestment += totals.get(month) ?? 0;
+
+        return Number(accumulatedInvestment.toFixed(2));
       }),
     };
   }
@@ -485,20 +595,22 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
   } {
     const totals = new Map<string, { entrada: number; saida: number }>();
 
-    records.forEach((record) => {
-      const month = record.date.slice(0, 7);
-      const current = totals.get(month) ?? { entrada: 0, saida: 0 };
+    records
+      .filter((record) => !this.isInvestmentTransferRecord(record))
+      .forEach((record) => {
+        const month = record.date.slice(0, 7);
+        const current = totals.get(month) ?? { entrada: 0, saida: 0 };
 
-      if (record.type === 'entrada') {
-        current.entrada += record.value;
-      }
+        if (record.type === 'entrada') {
+          current.entrada += record.value;
+        }
 
-      if (record.type === 'saida') {
-        current.saida += record.value;
-      }
+        if (record.type === 'saida') {
+          current.saida += record.value;
+        }
 
-      totals.set(month, current);
-    });
+        totals.set(month, current);
+      });
 
     const months = Array.from(totals.keys()).sort().slice(-6);
 
@@ -565,6 +677,14 @@ export class ChartPanel implements AfterViewInit, OnChanges, OnDestroy {
     const [year, month] = monthKey.split('-').map(Number);
     return new Intl.DateTimeFormat('pt-BR', { month: 'short', year: '2-digit' }).format(
       new Date(year, month - 1, 1),
+    );
+  }
+
+  private isInvestmentTransferRecord(record: FinancialRecord): boolean {
+    const normalizedCategory = record.category.trim().toLocaleLowerCase('pt-BR');
+
+    return this.investmentTransferCategories.some(
+      (category) => category.toLocaleLowerCase('pt-BR') === normalizedCategory,
     );
   }
 }

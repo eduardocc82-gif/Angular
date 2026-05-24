@@ -1,17 +1,26 @@
-<!-- Módulo dedicado a aportes, separado das despesas comuns. -->
+<!-- Módulo dedicado a aportes, resgates e carteira acumulada. -->
 <section class="page-shell investimentos-page">
   <div class="investimentos-page__hero">
     <div>
-      <h1 class="page-title">Investimentos</h1>
-      <p class="page-subtitle">Cadastre e acompanhe aportes sem misturar com despesas.</p>
+      <h1 class="page-title">Carteira e Investimentos</h1>
+      <p class="page-subtitle">Cadastre aportes, resgate investimentos e acompanhe a carteira.</p>
     </div>
-    <app-summary-card
-      title="Total investido"
-      [value]="totalInvested"
-      helper="Conforme filtros atuais"
-      icon="bi-graph-up-arrow"
-      tone="yellow"
-    ></app-summary-card>
+    <div class="investimentos-page__summary">
+      <app-summary-card
+        title="Total investido"
+        [value]="totalInvested"
+        helper="Conforme filtros atuais"
+        icon="bi-graph-up-arrow"
+        tone="yellow"
+      ></app-summary-card>
+      <app-summary-card
+        title="Saldo hoje carteira"
+        [value]="walletBalanceToday"
+        helper="Entradas - despesas até hoje"
+        icon="bi-cash-coin"
+        [tone]="walletBalanceTone"
+      ></app-summary-card>
+    </div>
   </div>
 
   <app-record-form
@@ -35,6 +44,25 @@
   <app-records-table
     title="Aportes de investimentos"
     [records]="filteredRecords"
-    (deleteRecord)="deleteRecord($event)"
+    actionButtonClass="btn-outline-success"
+    actionIcon="bi-box-arrow-in-down"
+    actionLabel="Resgatar investimento"
+    actionLabelPrefix="Resgatar"
+    (deleteRecord)="redeemInvestment($event)"
   ></app-records-table>
+
+  <div class="investimentos-page__charts">
+    <app-chart-panel
+      title="Saldo acumulado no período"
+      mode="closingBalance"
+      size="large"
+      [records]="records"
+    ></app-chart-panel>
+    <app-chart-panel
+      title="Valor total investido no período completo"
+      mode="investmentTotal"
+      size="large"
+      [records]="records"
+    ></app-chart-panel>
+  </div>
 </section>

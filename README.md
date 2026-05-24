@@ -1,9 +1,9 @@
 # Controle Financeiro Angular
 
-Data da versão: 19/05/2026 00:54 (America/Fortaleza)
-Versão do projeto: 2.2.0
+Data da versão: 24/05/2026 20:42 (America/Fortaleza)
+Versão do projeto: 3.0.0
 
-Aplicação Angular para controle financeiro pessoal, com dashboard, lançamentos, metas, investimentos, relatórios em PDF, persistência local e visualização por gráficos.
+Aplicação Angular para controle financeiro pessoal, com dashboard, lançamentos, metas, carteira e investimentos, relatórios em PDF, persistência local e visualização por gráficos.
 
 ## Recursos
 
@@ -15,10 +15,37 @@ Aplicação Angular para controle financeiro pessoal, com dashboard, lançamento
 - Projeção de meta com status, limite e margem diária.
 - Card de balanceamento das despesas por categoria em relação às entradas do mês.
 - Configuração flexível do percentual máximo de balanceamento entre 30% e 100%.
-- Tela dedicada a investimentos.
+- Tela unificada de Carteira e Investimentos, com aportes, resgates, saldo acumulado e total investido.
 - Tela de relatórios com prévia e geração de PDF para impressão.
 - Gráficos com Chart.js.
 - Interface responsiva com Bootstrap e Bootstrap Icons.
+
+## Alterações da versão 3.0.0
+
+- Criada a experiência unificada `Carteira e Investimentos`, mesclando carteira e investimentos em uma única aba.
+- A antiga rota `/carteira` agora redireciona para `/investimentos`, mantendo compatibilidade com links já existentes.
+- A tela `Carteira e Investimentos` passou a exibir os cards `Total investido` e `Saldo hoje carteira` lado a lado.
+- Movidos os gráficos `Saldo acumulado no período` e `Valor total investido no período completo` para a parte inferior da tela de Carteira e Investimentos.
+- Removido o gráfico `Saldo acumulado no período` da Dashboard.
+- O card `Saldo hoje carteira` da Dashboard agora abre a tela unificada de Carteira e Investimentos.
+- O card `Investimentos` da Dashboard foi renomeado para `Total investido` e passou a considerar aportes acumulados até a data atual.
+- Criada regra para lançar automaticamente uma saída ao cadastrar um investimento:
+  - descrição `Saída Investimento`;
+  - categoria `Aplicação Investimento`;
+  - mesma data e valor do aporte.
+- Criada regra para resgatar investimentos:
+  - o botão de lixeira da tabela de investimentos foi substituído por `Resgatar investimento`;
+  - o resgate lança uma entrada automática com descrição `Entrada Investimento`;
+  - a entrada automática usa a categoria `Resgate investimento`;
+  - o investimento original é removido da lista após o resgate.
+- A categoria `Aplicação Investimento` deixou de entrar no cálculo de uso da meta.
+- A categoria `Aplicação Investimento` deixou de entrar no cálculo de balanceamento de despesas.
+- As categorias `Aplicação Investimento` e `Resgate investimento` deixaram de aparecer nos gráficos `Despesas por categoria` e `Evolução mensal - Entradas vs Saídas`.
+- A aba `Lançamentos` passou a permitir o cadastro apenas de entradas e saídas no formulário.
+- O filtro de tipo da aba `Lançamentos` continua exibindo investimentos para consulta histórica.
+- A descrição dos perfis de metas passou a ser atualizada automaticamente quando o percentual do perfil é alterado em Configurações.
+- Adicionados testes para regras de carteira, investimento, resgate, exclusões de meta e balanceamento, e restrição de tipos no formulário.
+- Projeto atualizado para `3.0.0`.
 
 ## Alterações da versão 2.2.0
 
@@ -111,7 +138,7 @@ Histórico reconstruído por comparação dos arquivos zipados encontrados no di
 
 ## Versões principais
 
-- Projeto: 2.2.0
+- Projeto: 3.0.0
 - Angular: ^21.2.0
 - Angular CLI/build: ^21.2.8
 - TypeScript: ~5.9.2
@@ -155,7 +182,7 @@ dist/controle-financeiro-angular
 npm test -- --watch=false
 ```
 
-Validação da versão 2.2.0:
+Validação da versão 3.0.0:
 
 - `npm run build`: aprovado.
-- `npm test -- --watch=false`: aprovado, 4 arquivos de teste e 21 testes.
+- `npm test`: aprovado, 4 arquivos de teste e 29 testes.
